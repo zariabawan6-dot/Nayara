@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* ============================================
+   NAYARA — Brand Design Tokens
+   ============================================ */
+:root {
+  --nayara-gold:        #D4AF37;
+  --nayara-gold-dark:   #8B6B1F;
+  --nayara-gold-light:  #F0E4A8;
+  --nayara-black:       #111827;
+  --nayara-white:       #FFFFFF;
+  --nayara-soft:        #FAF8F3;
+  --nayara-text:        #111827;
+  --nayara-muted:       #6B7280;
+  --nayara-border:      #E5E7EB;
+  --nayara-success:     #10B981;
+  --nayara-error:       #EF4444;
+}
+
+/* ============================================
+   Global Resets & Base Styles
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  color: var(--nayara-text);
+  background-color: var(--nayara-white);
+  line-height: 1.6;
+}
+
+/* ============================================
+   Typography Utilities
+   ============================================ */
+.font-display {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+}
+
+.font-body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ============================================
+   Animations & Keyframes
+   ============================================ */
+@layer utilities {
+
+  /* Slide-in from right (cart drawer) */
+  @keyframes slide-in {
+    from { opacity: 0; transform: translateX(100%); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .animate-slide-in {
+    animation: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Fade up (sections) */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-up {
+    animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* Shimmer (loading / hover) */
+  @keyframes shimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  .animate-shimmer {
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Gold pulse */
+  @keyframes gold-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.3); }
+    50%       { box-shadow: 0 0 0 8px rgba(212, 175, 55, 0); }
+  }
+  .animate-gold-pulse {
+    animation: gold-pulse 2s infinite;
+  }
+
+  /* Slide in from right (mobile filter) */
+  @keyframes slide-in-right {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0); }
+  }
+  .animate-slide-in-right {
+    animation: slide-in-right 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Scrollbar hide */
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+/* ============================================
+   Custom Scrollbar (subtle)
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F9F9F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nayara-gold);
+}

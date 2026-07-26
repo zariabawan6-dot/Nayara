@@ -70,16 +70,7 @@ const ContactPage = () => {
                     <div className="bg-[#D4AF37]/10 p-4 rounded-full text-[#D4AF37] group-hover:bg-[#D4AF37] group-hover:text-[#111827] transition-all duration-300">
                       <MapPin size={24} strokeWidth={1.5} />
                     </div>
-                    <div className="mt-1">
-                      <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#111827] mb-2">
-                        Visit Us
-                      </h4>
-                      <p className="text-gray-500 text-sm leading-relaxed font-body">
-                        Shop 45, Anar Kali Bazar,
-                        <br />
-                        Anar Kali, FSD, Pakistan.
-                      </p>
-                    </div>
+                    
                   </div>
 
                   {/* Phone */}

@@ -152,7 +152,7 @@ const CartPage = () => {
 
   console.log(subtotal);
 
-  const deliveryCharges = subtotal >= 5000 ? 0 : 250;
+  const deliveryCharges = subtotal >= 5000 ? 0 : 300;
   const total = subtotal + deliveryCharges;
 
   const formatPrice = (price) => new Intl.NumberFormat("en-PK").format(price);

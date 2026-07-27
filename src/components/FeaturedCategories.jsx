@@ -25,6 +25,16 @@ const FeaturedCategories = () => {
       className: "col-span-12 md:col-span-4",
     },
     {
+      id: "sarees",
+      title: "Sarees",
+      description: "Timeless drapes, elegantly woven.",
+      // Traditional saree editorial shot
+      image:
+        "https://images.unsplash.com/photo-1769500804057-ca1391bf4617?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      link: "/shop?category=Sarees",
+      className: "col-span-12 md:col-span-4",
+    },
+    {
       id: "sale",
       title: "Special Sale",
       description: "Up to 50% Off.",
@@ -32,7 +42,7 @@ const FeaturedCategories = () => {
       image:
         "https://images.unsplash.com/photo-1705920821957-5d1a22a1d829?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       link: "/shop?collection=Summer+Classics",
-      className: "col-span-12 md:col-span-6",
+      className: "col-span-12 md:col-span-4",
     },
     {
       id: "view-all",
@@ -40,7 +50,7 @@ const FeaturedCategories = () => {
       description: "Explore the complete NAYARA range.",
       image: "", // No image for this card, solid background
       link: "/shop",
-      className: "col-span-12 md:col-span-6",
+      className: "col-span-12 md:col-span-4",
     },
   ];
 

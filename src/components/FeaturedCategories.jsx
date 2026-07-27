@@ -11,7 +11,7 @@ const FeaturedCategories = () => {
       // High-end editorial shot with elegant draped textile aesthetics
       image:
         "https://images.unsplash.com/photo-1702974779825-7103511e5471?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      link: "/shop?category=Unstitched",
+      link: "/shop?search=Unstitch",
       className: "col-span-12 md:col-span-8",
     },
     {

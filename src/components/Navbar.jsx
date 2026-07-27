@@ -20,7 +20,7 @@ const Navbar = () => {
     { name: "Shop", to: "/shop" },
     {
       name: "Unstitched",
-      to: "/shop?category=Unstitched&page=1&collection=Summer+Classics",
+      to: "/shop?search=Unstitch",
       isNew: true,
     },
     {
@@ -28,6 +28,7 @@ const Navbar = () => {
       to: "/shop?category=Stitched&page=1&collection=Summer+Classics",
     },
     { name: "New Arrivals", to: "/shop?collection=New+Arrivals" },
+    { name: "Sarees", to: "/shop?category=Sarees" },
   ];
 
   return (
@@ -57,39 +58,39 @@ const Navbar = () => {
               <Menu size={22} strokeWidth={1.2} />
             </button>
 
-            {/* Desktop Left-Aligned Logo (Inspired by high-end design) */}
+            {/* Desktop Left-Aligned Logo (nudged further left) */}
             <Link
-  to="/"
-  className="hidden lg:flex items-center gap-3 group tracking-[0.25em] transition-transform duration-300"
->
-  <img
-    src="/NAYARA.jpeg"
-    alt="Nayara"
-    className="h-25 w-25 object-contain rounded-full transform group-hover:scale-[1.01] transition-transform"
-  />
-  <span className="font-serif text-2xl font-bold text-[#111827] tracking-[0.3em] uppercase block transform group-hover:scale-[1.01]">
-    Nayara
-  </span>
-</Link>
+              to="/"
+              className="hidden lg:flex items-center gap-3 group tracking-[0.25em] transition-transform duration-300 lg:-ml-4 xl:-ml-6"
+            >
+              <img
+                src="/NAYARA.jpeg"
+                alt="Nayara"
+                className="h-25 w-25 object-contain rounded-full transform group-hover:scale-[1.01] transition-transform"
+              />
+              <span className="font-serif text-2xl font-bold text-[#111827] tracking-[0.3em] uppercase block transform group-hover:scale-[1.01]">
+                Nayara
+              </span>
+            </Link>
           </div>
 
           {/* Mobile Center Logo */}
           <Link
-  to="/"
-  className="lg:hidden absolute left-1/2 -translate-x-1/2 flex items-center gap-2 tracking-[0.25em]"
->
-  <img
-    src="/NAYARA.jpeg"
-    alt="Naa"
-    className="h-8 w-8 object-contain rounded-full"
-  />
-  <span className="font-serif text-xl font-bold text-[#111827] tracking-[0.25em] uppercase">
-    Nayara
-  </span>
-</Link>
+            to="/"
+            className="lg:hidden absolute left-1/2 -translate-x-1/2 flex items-center gap-2 tracking-[0.25em]"
+          >
+            <img
+              src="/NAYARA.jpeg"
+              alt="Naa"
+              className="h-8 w-8 object-contain rounded-full"
+            />
+            <span className="font-serif text-xl font-bold text-[#111827] tracking-[0.25em] uppercase">
+              Nayara
+            </span>
+          </Link>
 
           {/* Center Side: Navigation Links (Desktop) */}
-          <div className="hidden lg:flex items-center justify-center gap-10 xl:gap-12">
+          <div className="hidden lg:flex items-center justify-center gap-8 xl:gap-10">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -157,13 +158,13 @@ const Navbar = () => {
           {/* Mobile Drawer Header */}
           <div className="px-6 py-6 border-b border-[#E5E7EB] flex justify-between items-center bg-[#FAF8F3]">
             <span className="flex items-center gap-2 font-serif text-xl font-bold tracking-[0.2em] text-[#111827] uppercase">
-  <img
-    src="/NAYARA.jpeg"
-    alt="Nayara"
-    className="h-8 w-8 object-contain rounded-full"
-  />
-  Nayara
-</span>
+              <img
+                src="/NAYARA.jpeg"
+                alt="Nayara"
+                className="h-8 w-8 object-contain rounded-full"
+              />
+              Nayara
+            </span>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
               className="p-1 text-[#6B7280] hover:text-[#111827] transition-colors"

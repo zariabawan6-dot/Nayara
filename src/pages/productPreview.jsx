@@ -15,7 +15,6 @@ import {
   Package,
   Layers,
 } from "lucide-react";
-// Ensure you have react-icons installed: npm install react-icons
 import { FaSquareWhatsapp } from "react-icons/fa6";
 import { AiFillTikTok } from "react-icons/ai";
 import { supabase } from "../api/supabase";
@@ -24,7 +23,6 @@ import { useCart } from "../context/cartContext";
 import { useToast } from "../context/ToastContext";
 import { fbTrack } from "../lib/fbPixel";
 
-// Utility: Currency Formatter
 const formatPKR = (amount) => {
   return new Intl.NumberFormat("en-PK", {
     style: "currency",
@@ -34,7 +32,6 @@ const formatPKR = (amount) => {
   }).format(amount);
 };
 
-// Utility: Date Formatter
 const formatDate = (timestamp) => {
   if (!timestamp) return "";
   return new Date(timestamp).toLocaleDateString("en-GB", {
@@ -52,9 +49,10 @@ const ProductPreview = () => {
   const { addToCart } = useCart();
   const { addToast } = useToast();
 
-  // UI States
   const [selectedImage, setSelectedImage] = useState(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [sizeError, setSizeError] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -115,10 +113,25 @@ const ProductPreview = () => {
         console.log("Error sharing", err);
       }
     } else {
-      // Fallback: Copy to clipboard
       navigator.clipboard.writeText(window.location.href);
       alert("Link copied to clipboard!");
     }
+  };
+
+  const handleAddToCart = () => {
+    if (product.is_out_of_stock) return;
+
+    const hasSizes = product.sizes && product.sizes.length > 0;
+    if (hasSizes && !selectedSize) {
+      setSizeError(true);
+      return;
+    }
+
+    addToCart(product, selectedSize);
+    addToast(
+      `${product.name}${selectedSize ? " - " + selectedSize : ""}`,
+      "success",
+    );
   };
 
   if (loading) {
@@ -144,7 +157,7 @@ const ProductPreview = () => {
           <h2 className="text-xl text-[#111827] font-display">
             {error || "Product not found"}
           </h2>
-          <a
+          
             href="/shop"
             className="text-[#111827] text-sm uppercase tracking-widest font-semibold border-b border-[#111827] hover:text-[#D4AF37] hover:border-[#D4AF37] transition-colors"
           >
@@ -156,17 +169,19 @@ const ProductPreview = () => {
   }
 
   const discountPercentage =
-    product.price > product.discounted_price
+    product.price > product.discount_price
       ? Math.round(
-          ((product.price - product.discounted_price) / product.price) * 100,
+          ((product.price - product.discount_price) / product.price) * 100,
         )
       : 0;
 
-  // Safe logic for description image (use second image, or fallback to first)
   const descriptionImage =
     product.images_urls.length > 1
       ? product.images_urls[1]
       : product.images_urls[0];
+
+  const hasSizes = product.sizes && product.sizes.length > 0;
+  const outOfStock = product.is_out_of_stock;
 
   return (
     <div className="min-h-screen bg-[#FAF8F3] font-body pb-16">
@@ -189,13 +204,21 @@ const ProductPreview = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700 ease-in-out cursor-zoom-in"
+                  className={`w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700 ease-in-out cursor-zoom-in ${
+                    outOfStock ? "grayscale opacity-70" : ""
+                  }`}
                 />
               </AnimatePresence>
 
-              {discountPercentage > 0 && (
+              {discountPercentage > 0 && !outOfStock && (
                 <div className="absolute top-4 left-4 bg-[#D4AF37] text-[#111827] text-[10px] font-bold px-3 py-1.5 rounded-sm tracking-widest uppercase shadow-sm">
                   -{discountPercentage}% OFF
+                </div>
+              )}
+
+              {outOfStock && (
+                <div className="absolute top-4 left-4 bg-[#111827] text-white text-[10px] font-bold px-3 py-1.5 rounded-sm tracking-widest uppercase shadow-sm">
+                  Out of Stock
                 </div>
               )}
             </div>
@@ -242,10 +265,17 @@ const ProductPreview = () => {
                 {product.name}
               </h1>
 
-              <div className="flex items-center gap-2 text-xs text-green-600 font-semibold uppercase tracking-widest">
-                <CheckCircle2 size={14} />
-                <span>In Stock & Ready to Ship</span>
-              </div>
+              {outOfStock ? (
+                <div className="flex items-center gap-2 text-xs text-red-600 font-semibold uppercase tracking-widest">
+                  <AlertCircle size={14} />
+                  <span>Currently Out of Stock</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 text-xs text-green-600 font-semibold uppercase tracking-widest">
+                  <CheckCircle2 size={14} />
+                  <span>In Stock & Ready to Ship</span>
+                </div>
+              )}
             </div>
 
             {/* Pricing */}
@@ -260,7 +290,45 @@ const ProductPreview = () => {
               )}
             </div>
 
-            {/* Policy Card - NEW INSERTION */}
+            {/* Size Selector */}
+            {hasSizes && (
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    Select Size
+                  </h3>
+                  {sizeError && (
+                    <span className="text-[10px] text-red-500 font-semibold uppercase tracking-widest">
+                      Please select a size
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-3">
+                  {product.sizes.map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      disabled={outOfStock}
+                      onClick={() => {
+                        setSelectedSize(size);
+                        setSizeError(false);
+                      }}
+                      className={`px-6 py-3 rounded-sm text-sm font-semibold border transition-colors ${
+                        selectedSize === size
+                          ? "bg-[#111827] text-white border-[#111827]"
+                          : sizeError
+                            ? "bg-white text-gray-500 border-red-300"
+                            : "bg-white text-gray-500 border-[#E5E7EB] hover:border-[#D4AF37]"
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Policy Card */}
             <div
               onClick={() => {
                 window.location.href = "/storepolicies";
@@ -298,32 +366,18 @@ const ProductPreview = () => {
                 Have questions?
               </h3>
               <div className="flex items-center gap-4">
-                <a
-                  href="https://wa.me/923247678969"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-green-600 transition-colors duration-300 hover:scale-110 transform"
-                >
-                  <FaSquareWhatsapp size={28} />
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-black transition-colors duration-300 hover:scale-110 transform"
-                >
-                  <AiFillTikTok size={32} />
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-pink-600 transition-colors duration-300 hover:scale-110 transform"
-                >
-                  <Instagram size={28} />
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-blue-600 transition-colors duration-300 hover:scale-110 transform"
-                >
-                  <Facebook size={28} />
-                </a>
+                <a href="https://wa.me/923166071102" target="_blank" rel="noopener noreferrer" className="...">
+  <FaSquareWhatsapp size={28} />
+</a>
+<a href="https://www.tiktok.com/@yourusername" target="_blank" rel="noopener noreferrer" className="...">
+  <AiFillTikTok size={32} />
+</a>
+<a href="https://www.instagram.com/nayara_zone.pk" target="_blank" rel="noopener noreferrer" className="...">
+  <Instagram size={28} />
+</a>
+<a href="https://www.facebook.com/nayarazone" target="_blank" rel="noopener noreferrer" className="...">
+  <Facebook size={28} />
+</a>
               </div>
             </div>
 
@@ -337,19 +391,18 @@ const ProductPreview = () => {
             <div className="flex flex-col gap-4">
               <div className="flex gap-4">
                 <motion.button
-                  onClick={() => {
-                    addToCart(product);
-                    addToast(
-                      `${product.name} - ${product.color || "Standard"}`,
-                      "success",
-                    );
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="flex-1 bg-[#111827] hover:bg-black text-white py-4 rounded-sm font-semibold text-sm uppercase tracking-widest flex items-center justify-center gap-3 shadow-md transition-colors border border-[#111827]"
+                  onClick={handleAddToCart}
+                  disabled={outOfStock}
+                  whileHover={!outOfStock ? { scale: 1.02 } : {}}
+                  whileTap={!outOfStock ? { scale: 0.98 } : {}}
+                  className={`flex-1 py-4 rounded-sm font-semibold text-sm uppercase tracking-widest flex items-center justify-center gap-3 shadow-md transition-colors border ${
+                    outOfStock
+                      ? "bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed"
+                      : "bg-[#111827] hover:bg-black text-white border-[#111827]"
+                  }`}
                 >
                   <ShoppingBag size={18} />
-                  Add to Cart
+                  {outOfStock ? "Out of Stock" : "Add to Cart"}
                 </motion.button>
 
                 <motion.button
@@ -388,7 +441,6 @@ const ProductPreview = () => {
       <div className="max-w-6xl mx-auto px-4 md:px-8 mt-8">
         <div className="bg-white rounded-sm shadow-sm border border-[#E5E7EB] p-8 md:p-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
-            {/* Text Content */}
             <div className="order-2 md:order-1">
               <h3 className="text-3xl font-display text-[#111827] mb-8 relative inline-block font-semibold">
                 Details & Description
@@ -419,7 +471,6 @@ const ProductPreview = () => {
               </p>
             </div>
 
-            {/* Secondary Image */}
             <div className="order-1 md:order-2 flex justify-center md:justify-end">
               <div className="relative p-2 bg-white border border-[#E5E7EB] shadow-md rounded-sm">
                 <img

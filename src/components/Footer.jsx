@@ -72,8 +72,8 @@ const Footer = () => {
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex space-x-6">
-            <a href="https://instagram.com/nayar_zone.pk" target="_blank" rel="noopener noreferrer"><Instagram className={iconClass} /></a>
-            <a href="https://www.facebook.com/share/17sJWchuyS/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"><Facebook className={iconClass} /></a>
+            <a href="https://instagram.com/nayara_zone.pk" target="_blank" rel="noopener noreferrer"><Instagram className={iconClass} /></a>
+            <a href="https://www.facebook.com/Nayarazone" target="_blank" rel="noopener noreferrer"><Facebook className={iconClass} /></a>
             <AiFillTikTok className={iconClass} />
             <a href="https://wa.me/923166071102" target="_blank" rel="noopener noreferrer"><IoLogoWhatsapp className={iconClass} /></a>
           </div>

@@ -353,8 +353,8 @@ const CartPage = () => {
             {/* 1. Cart Items List */}
             <div className="bg-white rounded-sm shadow-sm border border-[#E5E7EB] overflow-hidden p-6 md:p-10 space-y-8">
               {cart.map((item) => (
-                <div
-                  key={item.id}
+  <div
+    key={`${item.id}-${item.size}`}
                   className="flex flex-col sm:flex-row gap-8 pb-8 border-b border-[#E5E7EB] last:border-0 last:pb-0"
                 >
                   <Link
@@ -390,9 +390,9 @@ const CartPage = () => {
                     <div className="flex justify-between items-end mt-6">
                       <div className="flex items-center border border-[#E5E7EB] rounded-sm bg-white">
                         <button
-                          onClick={() =>
-                            updateQuantity(item.id, (item.quantity || 1) - 1)
-                          }
+  onClick={() =>
+    updateQuantity(item.id, item.size, (item.quantity || 1) - 1)
+  }
                           className="p-2 hover:bg-gray-50 text-gray-500 transition-colors"
                           disabled={item.quantity <= 1}
                         >
@@ -402,16 +402,16 @@ const CartPage = () => {
                           {item.quantity || 1}
                         </span>
                         <button
-                          onClick={() =>
-                            updateQuantity(item.id, (item.quantity || 1) + 1)
-                          }
+  onClick={() =>
+    updateQuantity(item.id, item.size, (item.quantity || 1) + 1)
+  }
                           className="p-2 hover:bg-gray-50 text-gray-500 transition-colors"
                         >
                           <Plus size={14} />
                         </button>
                       </div>
                       <button
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(item.id, item.size)}
                         className="text-gray-400 hover:text-red-600 flex items-center gap-1 text-[10px] font-semibold uppercase tracking-widest transition-colors"
                       >
                         <Trash2 size={12} /> Remove

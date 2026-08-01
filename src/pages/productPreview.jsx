@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -14,6 +14,8 @@ import {
   Facebook,
   Package,
   Layers,
+  X,
+  ZoomIn,
 } from "lucide-react";
 import { FaSquareWhatsapp } from "react-icons/fa6";
 import { AiFillTikTok } from "react-icons/ai";
@@ -53,6 +55,7 @@ const ProductPreview = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
   const [sizeError, setSizeError] = useState(false);
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -100,6 +103,20 @@ const ProductPreview = () => {
       fetchProduct();
     }
   }, [id]);
+
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") setIsZoomOpen(false);
+    };
+    if (isZoomOpen) {
+      document.addEventListener("keydown", handleEsc);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+      document.body.style.overflow = "auto";
+    };
+  }, [isZoomOpen]);
 
   const handleShare = async () => {
     if (navigator.share && product) {
@@ -157,10 +174,7 @@ const ProductPreview = () => {
           <h2 className="text-xl text-[#111827] font-display">
             {error || "Product not found"}
           </h2>
-          
-            href="/shop"
-            className="text-[#111827] text-sm uppercase tracking-widest font-semibold border-b border-[#111827] hover:text-[#D4AF37] hover:border-[#D4AF37] transition-colors"
-          >
+          <a href="/shop" className="text-[#111827] text-sm uppercase tracking-widest font-semibold border-b border-[#111827] hover:text-[#D4AF37] hover:border-[#D4AF37] transition-colors">
             Return to Shop
           </a>
         </div>
@@ -192,7 +206,6 @@ const ProductPreview = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="max-w-6xl w-full bg-white rounded-sm shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 border border-[#E5E7EB]"
         >
-          {/* LEFT COLUMN: Image Gallery */}
           <div className="p-6 md:p-8 flex flex-col gap-6">
             <div className="relative w-full aspect-[3/4] md:aspect-[4/5] bg-gray-50 rounded-sm overflow-hidden group border border-[#E5E7EB]">
               <AnimatePresence mode="wait">
@@ -204,11 +217,21 @@ const ProductPreview = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.4 }}
+                  onClick={() => setIsZoomOpen(true)}
                   className={`w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700 ease-in-out cursor-zoom-in ${
                     outOfStock ? "grayscale opacity-70" : ""
                   }`}
                 />
               </AnimatePresence>
+
+              <button
+                type="button"
+                onClick={() => setIsZoomOpen(true)}
+                className="absolute bottom-4 right-4 z-10 bg-white/90 hover:bg-white text-[#111827] p-2.5 rounded-full shadow-md transition-colors"
+                aria-label="Zoom image"
+              >
+                <ZoomIn size={18} />
+              </button>
 
               {discountPercentage > 0 && !outOfStock && (
                 <div className="absolute top-4 left-4 bg-[#D4AF37] text-[#111827] text-[10px] font-bold px-3 py-1.5 rounded-sm tracking-widest uppercase shadow-sm">
@@ -223,7 +246,6 @@ const ProductPreview = () => {
               )}
             </div>
 
-            {/* Thumbnail Strip */}
             {product.images_urls.length > 1 && (
               <div className="flex gap-3 overflow-x-auto pb-2 custom-scrollbar">
                 {product.images_urls.map((img, index) => (
@@ -247,7 +269,6 @@ const ProductPreview = () => {
             )}
           </div>
 
-          {/* RIGHT COLUMN: Product Details */}
           <div className="p-6 md:p-12 flex flex-col justify-center bg-white">
             <div className="mb-6">
               <div className="flex flex-wrap gap-2 mb-4">
@@ -278,7 +299,6 @@ const ProductPreview = () => {
               )}
             </div>
 
-            {/* Pricing */}
             <div className="flex items-baseline gap-4 mb-8 border-b border-[#E5E7EB] pb-8">
               <span className="text-3xl font-semibold text-[#111827]">
                 {formatPKR(product.discount_price)}
@@ -290,7 +310,6 @@ const ProductPreview = () => {
               )}
             </div>
 
-            {/* Size Selector */}
             {hasSizes && (
               <div className="mb-8">
                 <div className="flex items-center justify-between mb-3">
@@ -328,7 +347,6 @@ const ProductPreview = () => {
               </div>
             )}
 
-            {/* Policy Card */}
             <div
               onClick={() => {
                 window.location.href = "/storepolicies";
@@ -349,7 +367,7 @@ const ProductPreview = () => {
                       Delivery & Exchange Policy
                     </button>
                     <button className="text-xs text-gray-500 mt-1 text-left">
-                      Open parcel allowed • 5-Day Returns
+                      Open parcel allowed - 5-Day Returns
                     </button>
                   </div>
                 </div>
@@ -360,34 +378,31 @@ const ProductPreview = () => {
               </div>
             </div>
 
-            {/* Contact Section */}
             <div className="mb-8">
               <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
                 Have questions?
               </h3>
               <div className="flex items-center gap-4">
-                <a href="https://wa.me/923166071102" target="_blank" rel="noopener noreferrer" className="...">
-  <FaSquareWhatsapp size={28} />
-</a>
-<a href="https://www.tiktok.com/@yourusername" target="_blank" rel="noopener noreferrer" className="...">
-  <AiFillTikTok size={32} />
-</a>
-<a href="https://www.instagram.com/nayara_zone.pk" target="_blank" rel="noopener noreferrer" className="...">
-  <Instagram size={28} />
-</a>
-<a href="https://www.facebook.com/nayarazone" target="_blank" rel="noopener noreferrer" className="...">
-  <Facebook size={28} />
-</a>
+                <a href="https://wa.me/923166071102" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-600 transition-colors duration-300 hover:scale-110 transform">
+                  <FaSquareWhatsapp size={28} />
+                </a>
+                <a href="https://www.tiktok.com/@yourusername" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-black transition-colors duration-300 hover:scale-110 transform">
+                  <AiFillTikTok size={32} />
+                </a>
+                <a href="https://www.instagram.com/nayara_zone.pk" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-600 transition-colors duration-300 hover:scale-110 transform">
+                  <Instagram size={28} />
+                </a>
+                <a href="https://www.facebook.com/nayarazone" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 transition-colors duration-300 hover:scale-110 transform">
+                  <Facebook size={28} />
+                </a>
               </div>
             </div>
 
-            {/* Meta Info */}
             <div className="flex items-center gap-2 text-gray-400 text-xs mb-8 italic">
               <Clock size={14} />
               <span>Listed on {formatDate(product.created_at)}</span>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-col gap-4">
               <div className="flex gap-4">
                 <motion.button
@@ -437,7 +452,6 @@ const ProductPreview = () => {
         </motion.div>
       </div>
 
-      {/* Description Section */}
       <div className="max-w-6xl mx-auto px-4 md:px-8 mt-8">
         <div className="bg-white rounded-sm shadow-sm border border-[#E5E7EB] p-8 md:p-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
@@ -488,6 +502,36 @@ const ProductPreview = () => {
         currentProductId={product.id}
         collection={product.collection}
       />
+
+      <AnimatePresence>
+        {isZoomOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsZoomOpen(false)}
+            className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 md:p-10 overflow-y-auto cursor-zoom-out"
+          >
+            <button
+              type="button"
+              onClick={() => setIsZoomOpen(false)}
+              className="fixed top-4 right-4 md:top-6 md:right-6 z-[110] bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-full transition-colors"
+              aria-label="Close zoom"
+            >
+              <X size={22} />
+            </button>
+            <motion.img
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              onClick={(e) => e.stopPropagation()}
+              src={selectedImage}
+              alt={product.name}
+              className="max-w-full md:max-w-[90vw] w-auto h-auto object-contain rounded-sm shadow-2xl cursor-default"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -136,46 +136,50 @@ const HeroSection = () => {
 
           {/* Main Image */}
           <img
-            src="herosec.png"
+            src="coverphoto.jpeg"
             alt="NAYARA Luxury Pret Collection – model in elegant Pakistani attire"
             className="w-full h-full object-cover object-right relative z-10"
           />
 
-          {/* Floating Product Highlight Card */}
-          <motion.div
-            variants={floatingCardVariants}
-            initial="hidden"
-            animate="visible"
-            className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 bg-white/90 backdrop-blur-md rounded-lg shadow-2xl p-4 max-w-[220px] border border-white/40"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-md overflow-hidden bg-[#FAF8F3] flex-shrink-0">
-                <img
-                  src="herosec.png"
-                  alt="Product highlight"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <span className="inline-block px-2 py-0.5 bg-[#D4AF37]/20 text-[#8B6B1F] text-[10px] font-bold uppercase tracking-wider rounded-sm">
-                  New
-                </span>
-                <p className="text-sm font-semibold text-[#111827] mt-0.5">
-                  Embroidered Lawn
-                </p>
-                <p className="text-xs text-[#6B7280]">PKR 8,990</p>
-              </div>
-            </div>
-          </motion.div>
+         {/* Floating Product Highlight Card */}
+<motion.div
+  variants={floatingCardVariants}
+  initial="hidden"
+  animate="visible"
+  className="absolute left-0.5 top-[70%] -translate-y-1/2 scale-80 z-20 bg-white/90 backdrop-blur-md rounded-lg shadow-2xl p-2.5 max-w-[170px] border border-white/40"
+>
+  <div className="flex items-center gap-2.5">
+    <div className="w-16 h-16 rounded-md overflow-hidden bg-[#FAF8F3] flex-shrink-0">
+      <img
+        src="coverphoto.jpeg"
+        alt="Product highlight"
+        className="w-full h-full object-cover"
+      />
+    </div>
 
+    <div>
+      <span className="inline-block px-1.5 py-0.5 bg-[#D4AF37]/20 text-[#8B6B1F] text-[8px] font-bold uppercase tracking-wider rounded-sm">
+        New
+      </span>
+
+      <p className="text-[11px] font-semibold text-[#111827] mt-0.5">
+        Embroidered Lawn
+      </p>
+
+      <p className="text-[10px] text-[#6B7280]">
+        PKR 5,990
+      </p>
+    </div>
+  </div>
+</motion.div>
           {/* Collection Badge (top right) */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.8, duration: 0.5 }}
-            className="absolute top-6 right-6 z-20 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-[#D4AF37]/20"
+            className="absolute top-6 left-6 z-20 bg-white/80 backdrop-blur-sm px-2 py-0.5 rounded-full shadow-lg border border-[#D4AF37]/20"
           >
-            <p className="text-xs uppercase tracking-wider text-[#8B6B1F] font-medium">
+            <p className="text-[10px] uppercase tracking-wider text-[#8B6B1F] font-medium">
               Festive Edit
             </p>
           </motion.div>

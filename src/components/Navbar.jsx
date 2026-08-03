@@ -34,13 +34,33 @@ const Navbar = () => {
   return (
     <div className="w-full sticky top-0 z-50 bg-white">
       {/* Premium Top Announcement Bar */}
-      <div
-        className={`bg-[#111827] text-white text-[9px] sm:text-[11px] font-light tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center font-sans
-          ${isScrolled ? "h-0 opacity-0 overflow-hidden" : "h-9 py-2"}`}
-      >
-        Free Shipping on orders above{" "}
-        <span className="font-medium text-[#D4AF37] ml-1.5">PKR 5,000</span>
-      </div>
+      {/* Premium Top Announcement Bar */}
+<div className="bg-[#111827] text-white text-[9px] sm:text-[11px] font-light tracking-[0.12em] uppercase overflow-hidden h-9 flex items-center">
+  <div className="flex whitespace-nowrap animate-marquee">
+    <span className="mx-8">
+      Free Shipping on orders above{" "}
+      <span className="font-medium text-[#D4AF37]">PKR 5,000</span>
+    </span>
+
+    <span className="text-gray-400">|</span>
+
+    <span className="mx-8">
+      WhatsApp:
+      <span className="font-medium text-[#D4AF37] ml-1">
+        +92 316 6071102
+      </span>
+    </span>
+
+
+    <span className="text-gray-400">|</span>
+
+    <span className="mx-8">
+      Free Shipping on orders above{" "}
+      <span className="font-medium text-[#D4AF37]">PKR 5,000</span>
+    </span>
+  </div>
+</div>
+
 
       {/* Main Luxury Navbar */}
       <nav

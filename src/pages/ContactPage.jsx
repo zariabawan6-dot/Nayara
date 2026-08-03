@@ -83,7 +83,7 @@ const ContactPage = () => {
                         Contact Us
                       </h4>
                       <p className="text-gray-500 text-sm font-body">
-                        +92 300 0000000 <br />
+                        +92 316 6071102 <br />
                         <span className="text-[10px] text-gray-400 mt-1 inline-block uppercase tracking-wider font-semibold">
                           (Mon-Sat, 11 AM - 8 PM)
                         </span>
@@ -101,7 +101,7 @@ const ContactPage = () => {
                         Email Us
                       </h4>
                       <p className="text-gray-500 text-sm font-body">
-                        care@nayara.pk
+                        nayarazone36@gmail.com
                       </p>
                     </div>
                   </div>
@@ -110,14 +110,16 @@ const ContactPage = () => {
                 {/* Socials */}
                 <div className="mt-10 pt-8 border-t border-[#E5E7EB] flex gap-6">
                   <a
-                    href="#"
-                    className="text-gray-400 hover:text-[#111827] transition-colors"
+                    href="https://www.instagram.com/nayara_zone.pk"
+    target="_blank"
+    rel="noopener noreferrer"
                   >
                     <Instagram size={24} />
                   </a>
                   <a
-                    href="#"
-                    className="text-gray-400 hover:text-[#111827] transition-colors"
+                    href="https://www.facebook.com/Nayarazone"
+    target="_blank"
+    rel="noopener noreferrer"
                   >
                     <Facebook size={24} />
                   </a>
@@ -128,8 +130,10 @@ const ContactPage = () => {
                     <AiFillTikTok size={24} />
                   </a>
                   <a
-                    href="#"
-                    className="text-gray-400 hover:text-[#111827] transition-colors"
+                    href="https://wa.me/923166071102"
+    target="_blank"
+    rel="noopener noreferrer"
+    
                   >
                     <IoLogoWhatsapp size={24} />
                   </a>

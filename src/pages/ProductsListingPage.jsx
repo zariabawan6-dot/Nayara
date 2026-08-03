@@ -85,7 +85,7 @@ const ProductCollection = () => {
           const mappedUrls = item.product_images?.map(img => supabase.storage.from("products").getPublicUrl(img.file_path).data.publicUrl) || [];
           return {
             ...item,
-            price: item.original_price,
+            // price: item.original_price,
             images_urls: mappedUrls,
             image: mappedUrls.length > 0 ? mappedUrls[0] : "",
           };

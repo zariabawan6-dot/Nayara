@@ -92,6 +92,13 @@ const ProductCard = ({ product }) => {
 
   const outOfStock = product.is_out_of_stock;
   const hasSizes = product.sizes && product.sizes.length > 0;
+  const originalPrice = Number(product.price);
+  const salePrice = Number(product.discount_price || product.price);
+
+  const discountPercent =
+  salePrice < originalPrice
+    ? Math.round(((originalPrice - salePrice) / originalPrice) * 100)
+    : 0;
 
   const handleAddToCart = (e) => {
     if (outOfStock) {
@@ -152,12 +159,23 @@ const ProductCard = ({ product }) => {
           </div>
         )}
 
-        {/* Badge */}
-        {!outOfStock && product.collection === "New Arrivals" && (
-          <span className="absolute top-3 left-3 bg-[#D4AF37] px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[#111827] shadow-sm rounded-sm">
-            New
-          </span>
-        )}
+        {/* Discount Badge */}
+{!outOfStock && discountPercent > 0 && (
+  <span className="absolute top-2 left-2 bg-[#D4AF37] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#111827] shadow-sm rounded-full">
+    -{discountPercent}% OFF
+  </span>
+)}
+
+{/* New Arrival Badge */}
+{!outOfStock && product.collection === "New Arrivals" && (
+  <span
+    className={`absolute ${
+      discountPercent > 0 ? "top-12" : "top-3"
+    } left-3 bg-[#111827] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-sm rounded-sm`}
+  >
+    New
+  </span>
+)}
       </div>
 
       <div className="p-4 flex flex-col gap-1">
@@ -177,12 +195,17 @@ const ProductCard = ({ product }) => {
             </button>
           )}
         </div>
-        <p className="text-sm font-semibold text-[#111827] mt-1">
-          PKR{" "}
-          {new Intl.NumberFormat("en-PK").format(
-            product.discount_price || product.price
-          )}
-        </p>
+        <div className="flex items-center gap-2 mt-2 flex-wrap">
+  <span className="text-lg font-bold text-[#111827]">
+    Rs {new Intl.NumberFormat("en-PK").format(salePrice)}
+  </span>
+
+  {discountPercent > 0 && (
+    <span className="text-sm text-gray-400 line-through">
+      Rs {new Intl.NumberFormat("en-PK").format(originalPrice)}
+    </span>
+  )}
+</div>
       </div>
     </Link>
   );

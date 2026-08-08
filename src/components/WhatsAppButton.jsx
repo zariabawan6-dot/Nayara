@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const WhatsAppButton = ({
-  phoneNumber = "923XXXXXXXXX",
+  phoneNumber = "923166071102",
   message = "Hello! I'm interested in your suits 👗",
 }) => {
   const [hovered, setHovered] = useState(false);

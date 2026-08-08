@@ -45,6 +45,7 @@ import ProductPreview from "./pages/productPreview";
 import Navbar from "./components/Navbar";
 import StorePolicies from "./pages/StorePolicies";
 import { fbTrack } from "./lib/fbPixel";
+import WhatsAppButton from "./components/WhatsAppButton";
 // import Snowfall from "react-snowfall";
 
 function App() {
@@ -74,6 +75,11 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
         </Routes>
+
+         <WhatsAppButton
+        phoneNumber="923166071102"
+        message="Hello! I'm interested in your suits at Nayara Zone 👗"
+      />
       </div>
     </>
   );

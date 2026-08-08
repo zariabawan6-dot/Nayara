@@ -289,7 +289,7 @@ const CartPage = () => {
             </span>
           </p>
           <p className="mt-1">
-            We will contact you at {formData.phone} for confirmation.
+            We will contact you on WhatsApp at {formData.phone} within 24 hours to confirm your order. 🛍️
           </p>
         </div>
         <button

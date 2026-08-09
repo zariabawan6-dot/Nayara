@@ -21,6 +21,7 @@ import { FaSquareWhatsapp } from "react-icons/fa6";
 import { AiFillTikTok } from "react-icons/ai";
 import { supabase } from "../api/supabase";
 import SimilarProductsSection from "../components/SimilarProducts";
+import ProductReviews from "../components/ProductReviews";
 import { useCart } from "../context/cartContext";
 import { useToast } from "../context/ToastContext";
 import { fbTrack } from "../lib/fbPixel";
@@ -56,6 +57,7 @@ const ProductPreview = () => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [sizeError, setSizeError] = useState(false);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
+  const [viewers, setViewers] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -117,6 +119,22 @@ const ProductPreview = () => {
       document.body.style.overflow = "auto";
     };
   }, [isZoomOpen]);
+
+  // 👇 ADD HERE
+  useEffect(() => {
+    const randomViewers = Math.floor(Math.random() * (35 - 8 + 1)) + 8;
+    setViewers(randomViewers);
+
+    const interval = setInterval(() => {
+      setViewers((prev) => {
+        const change = Math.random() > 0.5 ? 1 : -1;
+        const newVal = prev + change;
+        return Math.min(Math.max(newVal, 5), 40);
+      });
+    }, Math.random() * 4000 + 8000);
+
+    return () => clearInterval(interval);
+  }, [id]);
 
   const handleShare = async () => {
     if (navigator.share && product) {
@@ -292,23 +310,35 @@ const ProductPreview = () => {
                   <span>Currently Out of Stock</span>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 text-xs text-green-600 font-semibold uppercase tracking-widest">
-                  <CheckCircle2 size={14} />
-                  <span>In Stock & Ready to Ship</span>
-                </div>
+               <div className="flex flex-col gap-2">
+  <div className="flex items-center gap-2 text-xs text-green-600 font-semibold uppercase tracking-widest">
+    <CheckCircle2 size={14} />
+    <span>In Stock & Ready to Ship</span>
+  </div>
+  <div className="flex items-center gap-2 text-xs text-red-500 font-semibold uppercase tracking-widest">
+    <Clock size={14} />
+    <span>🔥 Limited Stock — Order Now!</span>
+  </div>
+
+</div>
               )}
             </div>
 
-            <div className="flex items-baseline gap-4 mb-8 border-b border-[#E5E7EB] pb-8">
-              <span className="text-3xl font-semibold text-[#111827]">
-                {formatPKR(product.discount_price)}
-              </span>
-              {product.price > product.discount_price && (
-                <span className="text-lg text-gray-400 line-through decoration-gray-400">
-                  {formatPKR(product.price)}
-                </span>
-              )}
-            </div>
+          <div className="mb-8 border-b border-[#E5E7EB] pb-8">
+  <div className="flex items-baseline gap-4 mb-3">
+    <span className="text-3xl font-semibold text-[#111827]">
+      {formatPKR(product.discount_price)}
+    </span>
+    {product.price > product.discount_price && (
+      <span className="text-lg text-gray-400 line-through decoration-gray-400">
+        {formatPKR(product.price)}
+      </span>
+    )}
+  </div>
+  <div className="flex items-center gap-2 text-xs text-orange-500 font-semibold uppercase tracking-widest animate-pulse">
+    <span>👁️ {viewers} people viewing this right now</span>
+  </div>
+</div>
 
             {hasSizes && (
               <div className="mb-8">
@@ -344,6 +374,7 @@ const ProductPreview = () => {
                     </button>
                   ))}
                 </div>
+                
               </div>
             )}
 
@@ -379,9 +410,20 @@ const ProductPreview = () => {
             </div>
 
             <div className="mb-8">
-              <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
-                Have questions?
-              </h3>
+              
+
+                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
+  Have questions?
+</h3>
+<a 
+  href="https://wa.me/923166071102" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  className="text-green-600 font-bold text-sm mb-3 block hover:underline"
+>
+  📲 WhatsApp: 0316-6071102
+</a>
+             
               <div className="flex items-center gap-4">
                 <a href="https://wa.me/923166071102" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-600 transition-colors duration-300 hover:scale-110 transform">
                   <FaSquareWhatsapp size={28} />
@@ -436,6 +478,7 @@ const ProductPreview = () => {
                   />
                 </motion.button>
               </div>
+
 
               <button
                 onClick={handleShare}
@@ -497,6 +540,8 @@ const ProductPreview = () => {
           </div>
         </div>
       </div>
+
+      <ProductReviews productId={product.id} />
 
       <SimilarProductsSection
         currentProductId={product.id}

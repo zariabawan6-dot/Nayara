@@ -168,6 +168,7 @@ const CartPage = () => {
         value: total,
         currency: "PKR",
         num_items: cart.length,
+        content_type: "product", // ✅ add this line
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -250,6 +251,7 @@ const CartPage = () => {
         value: total,
         currency: "PKR",
         num_items: cart.length,
+        content_type: "product",
       });
 
       setOrderId(newOrderId || "PENDING");

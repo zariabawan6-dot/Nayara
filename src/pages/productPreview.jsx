@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -120,7 +120,7 @@ const ProductPreview = () => {
     };
   }, [isZoomOpen]);
 
-  // 👇 ADD HERE
+  // ?? ADD HERE
   useEffect(() => {
     const randomViewers = Math.floor(Math.random() * (35 - 8 + 1)) + 8;
     setViewers(randomViewers);
@@ -317,7 +317,7 @@ const ProductPreview = () => {
   </div>
   <div className="flex items-center gap-2 text-xs text-red-500 font-semibold uppercase tracking-widest">
     <Clock size={14} />
-    <span>🔥 Limited Stock — Order Now!</span>
+    <span>?? Limited Stock � Order Now!</span>
   </div>
 
 </div>
@@ -336,7 +336,7 @@ const ProductPreview = () => {
     )}
   </div>
   <div className="flex items-center gap-2 text-xs text-orange-500 font-semibold uppercase tracking-widest animate-pulse">
-    <span>👁️ {viewers} people viewing this right now</span>
+    <span>??? {viewers} people viewing this right now</span>
   </div>
 </div>
 
@@ -421,7 +421,7 @@ const ProductPreview = () => {
   rel="noopener noreferrer"
   className="text-green-600 font-bold text-sm mb-3 block hover:underline"
 >
-  📲 WhatsApp: 0316-6071102
+  ?? WhatsApp: 0316-6071102
 </a>
              
               <div className="flex items-center gap-4">

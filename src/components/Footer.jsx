@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail, Clock, Instagram, Facebook } from "lucide-react";
-import { AiFillTikTok } from "react-icons/ai";
 import { IoLogoWhatsapp } from "react-icons/io";
 
 const Footer = () => {

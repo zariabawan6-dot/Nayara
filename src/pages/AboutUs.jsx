@@ -1,6 +1,5 @@
 import React from "react";
 import { Star, Heart, Scissors, MapPin } from "lucide-react";
-import Footer from "../components/Footer";
 
 const AboutPage = () => {
   // Brand Assets
@@ -194,7 +193,6 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 };

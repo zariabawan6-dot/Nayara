@@ -3,7 +3,6 @@ import { Eye } from "lucide-react";
 import { supabase } from "../api/supabase";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/cartContext";
-import { getOptimizedImageUrl } from "../lib/imageUtils";
 
 // --- Utility: Format Currency ---
 const formatPKR = (amount) => {
@@ -36,8 +35,7 @@ const NewArrivalsSection = () => {
         // Fetch products, sorted by newest first, limit to 8 items
         const { data, error } = await supabase
           .from("products")
-          // .select("*, product_images(file_path)")
-          .select("*, product_images(file_path, created_at)")
+          .select("*, product_images(file_path)")
           .order("created_at", { ascending: false })
           .limit(8);
 
@@ -45,10 +43,7 @@ const NewArrivalsSection = () => {
 
         const formattedData = data.map((item) => ({
           ...item,
-          // images_urls: item.product_images?.map(img => supabase.storage.from("products").getPublicUrl(img.file_path).data.publicUrl) || []
-          images_urls: item.product_images
-  ?.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-  .map(img => getOptimizedImageUrl(img.file_path)) || []
+          images_urls: item.product_images?.map(img => supabase.storage.from("products").getPublicUrl(img.file_path).data.publicUrl) || []
         }));
 
         setProducts(formattedData || []);

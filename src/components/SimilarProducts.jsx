@@ -24,13 +24,14 @@ const SimilarProductsSection = ({ currentProductId, collection }) => {
 
       try {
         const { data, error } = await supabase
-          .from("products")
-          .select(
-            "id, name, price, discount_price, category, collection, product_images(file_path)",
-          )
-          .neq("id", currentProductId) // Exclude current product
-          .eq("collection", collection) // Strictly match collection
-          .limit(4); // Fetch only what we need
+  .from("products")
+  .select(
+    "id, name, price, discount_price, category, collection, product_images(file_path)",
+  )
+  .neq("id", currentProductId)
+  .neq("category", "") 
+  .order("created_at", { ascending: false })
+  .limit(20);
 
         if (error) throw error;
 

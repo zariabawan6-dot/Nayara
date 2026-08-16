@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -18,7 +18,6 @@ import {
   ZoomIn,
 } from "lucide-react";
 import { FaSquareWhatsapp } from "react-icons/fa6";
-import { AiFillTikTok } from "react-icons/ai";
 import { supabase } from "../api/supabase";
 import SimilarProductsSection from "../components/SimilarProducts";
 import ProductReviews from "../components/ProductReviews";
@@ -317,7 +316,7 @@ const ProductPreview = () => {
   </div>
   <div className="flex items-center gap-2 text-xs text-red-500 font-semibold uppercase tracking-widest">
     <Clock size={14} />
-    <span>?? Limited Stock � Order Now!</span>
+    <span>⚡ Limited Stock � Order Now!</span>
   </div>
 
 </div>
@@ -336,7 +335,7 @@ const ProductPreview = () => {
     )}
   </div>
   <div className="flex items-center gap-2 text-xs text-orange-500 font-semibold uppercase tracking-widest animate-pulse">
-    <span>??? {viewers} people viewing this right now</span>
+    <span>👁 {viewers} people viewing this right now</span>
   </div>
 </div>
 
@@ -421,15 +420,12 @@ const ProductPreview = () => {
   rel="noopener noreferrer"
   className="text-green-600 font-bold text-sm mb-3 block hover:underline"
 >
-  ?? WhatsApp: 0316-6071102
+   WhatsApp: 0316-6071102
 </a>
              
               <div className="flex items-center gap-4">
                 <a href="https://wa.me/923166071102" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-600 transition-colors duration-300 hover:scale-110 transform">
                   <FaSquareWhatsapp size={28} />
-                </a>
-                <a href="https://www.tiktok.com/@yourusername" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-black transition-colors duration-300 hover:scale-110 transform">
-                  <AiFillTikTok size={32} />
                 </a>
                 <a href="https://www.instagram.com/nayara_zone.pk" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-600 transition-colors duration-300 hover:scale-110 transform">
                   <Instagram size={28} />

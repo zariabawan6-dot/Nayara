@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -275,7 +275,7 @@ const ProductPreview = () => {
                         : "border-transparent opacity-60 hover:opacity-100"
                     }`}
                   >
-                    <img
+                    <img loading="lazy"
                       src={img}
                       alt={`View ${index + 1}`}
                       className="w-full h-full object-cover"
@@ -316,7 +316,7 @@ const ProductPreview = () => {
   </div>
   <div className="flex items-center gap-2 text-xs text-red-500 font-semibold uppercase tracking-widest">
     <Clock size={14} />
-    <span>⚡ Limited Stock � Order Now!</span>
+    <span>? Limited Stock ? Order Now!</span>
   </div>
 
 </div>
@@ -335,7 +335,7 @@ const ProductPreview = () => {
     )}
   </div>
   <div className="flex items-center gap-2 text-xs text-orange-500 font-semibold uppercase tracking-widest animate-pulse">
-    <span>👁 {viewers} people viewing this right now</span>
+    <span>?? {viewers} people viewing this right now</span>
   </div>
 </div>
 
@@ -526,7 +526,7 @@ const ProductPreview = () => {
 
             <div className="order-1 md:order-2 flex justify-center md:justify-end">
               <div className="relative p-2 bg-white border border-[#E5E7EB] shadow-md rounded-sm">
-                <img
+                <img loading="lazy"
                   src={descriptionImage}
                   alt="Detail View"
                   className="w-full max-w-sm rounded-sm object-cover aspect-[4/5]"

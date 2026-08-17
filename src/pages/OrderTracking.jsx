@@ -314,7 +314,7 @@ const OrderTracking = () => {
                       >
                         <div className="w-14 h-18 rounded-sm overflow-hidden border border-[#E5E7EB] shrink-0 bg-gray-50">
                           {imageUrl && (
-                            <img
+                            <img loading="lazy"
                               src={imageUrl}
                               alt={product.name || "Product"}
                               className="w-full h-full object-cover"

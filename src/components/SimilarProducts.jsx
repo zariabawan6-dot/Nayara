@@ -31,7 +31,7 @@ const SimilarProductsSection = ({ currentProductId, collection }) => {
   .neq("id", currentProductId)
   .neq("category", "") 
   .order("created_at", { ascending: false })
-  .limit(20);
+  .limit(4);
 
         if (error) throw error;
 
@@ -116,7 +116,7 @@ const SimilarProductsSection = ({ currentProductId, collection }) => {
                 >
                   {/* Image Container */}
                   <div className="relative w-full aspect-[3/4] overflow-hidden rounded-sm bg-gray-50 mb-4 border border-[#E5E7EB]">
-                    <img
+                    <img loading="lazy"
                       src={displayImage}
                       alt={product.name}
                       className="w-full h-full object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-105"

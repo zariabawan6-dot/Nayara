@@ -363,7 +363,7 @@ const CartPage = () => {
                     to={`/shop/${item.id}`}
                     className="w-full sm:w-32 h-40 shrink-0 bg-gray-50 rounded-sm overflow-hidden group border border-[#E5E7EB]"
                   >
-                    <img
+                    <img loading="lazy"
                       src={item.images_urls[0]}
                       alt={item.name}
                       className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"

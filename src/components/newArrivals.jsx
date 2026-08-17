@@ -37,7 +37,7 @@ const NewArrivalsSection = () => {
           .from("products")
           .select("*, product_images(file_path)")
           .order("created_at", { ascending: false })
-          .limit(8);
+          .limit(4);
 
         if (error) throw error;
 
@@ -111,7 +111,7 @@ const NewArrivalsSection = () => {
                     onClick={() => handleNavigate(product.id)}
                     className="relative w-full h-[300px] sm:h-[350px] overflow-hidden mb-4 bg-gray-50 cursor-pointer border border-[#E5E7EB]"
                   >
-                    <img
+                    <img loading="lazy"
                       src={displayImage}
                       alt={product.name}
                       className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"

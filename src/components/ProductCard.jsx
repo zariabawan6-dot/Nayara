@@ -44,7 +44,7 @@ const ProductCard = ({ product }) => {
       onMouseLeave={() => setHovered(false)}
     >
       <div className="relative aspect-[3/4] overflow-hidden bg-gray-50 border-b border-[#E5E7EB]">
-        <img
+        <img loading="lazy"
           src={
             product.images_urls && product.images_urls[0]
               ? product.images_urls[0]

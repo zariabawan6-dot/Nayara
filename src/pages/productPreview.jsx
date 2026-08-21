@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -24,6 +24,7 @@ import ProductReviews from "../components/ProductReviews";
 import { useCart } from "../context/cartContext";
 import { useToast } from "../context/ToastContext";
 import { fbTrack } from "../lib/fbPixel";
+import { getOptimizedImageUrl } from "../lib/imageUtils";
 
 const formatPKR = (amount) => {
   return new Intl.NumberFormat("en-PK", {
@@ -72,12 +73,10 @@ const ProductPreview = () => {
 
         if (error) throw error;
 
-        const mappedUrls =
-          data.product_images?.map(
-            (img) =>
-              supabase.storage.from("products").getPublicUrl(img.file_path).data
-                .publicUrl,
-          ) || [];
+       const mappedUrls =
+  data.product_images?.map(
+    (img) => getOptimizedImageUrl(img.file_path)
+  ) || [];
         data.images_urls = mappedUrls;
 
         setProduct(data);
@@ -316,7 +315,7 @@ const ProductPreview = () => {
   </div>
   <div className="flex items-center gap-2 text-xs text-red-500 font-semibold uppercase tracking-widest">
     <Clock size={14} />
-    <span>? Limited Stock ? Order Now!</span>
+    <span>⚡ Limited Stock ? Order Now!</span>
   </div>
 
 </div>
@@ -335,7 +334,7 @@ const ProductPreview = () => {
     )}
   </div>
   <div className="flex items-center gap-2 text-xs text-orange-500 font-semibold uppercase tracking-widest animate-pulse">
-    <span>?? {viewers} people viewing this right now</span>
+    <span>👁 {viewers} people viewing this right now</span>
   </div>
 </div>
 

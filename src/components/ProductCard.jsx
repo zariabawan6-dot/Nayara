@@ -54,7 +54,6 @@ const ProductCard = ({ product }) => {
           className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${
             outOfStock ? "grayscale opacity-60" : ""
           }`}
-          loading="lazy"
         />
 
         {/* Out of Stock Overlay */}

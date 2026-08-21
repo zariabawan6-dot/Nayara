@@ -3,6 +3,7 @@ import { Eye } from "lucide-react";
 import { supabase } from "../api/supabase";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/cartContext";
+import { getOptimizedImageUrl } from "../lib/imageUtils";
 
 // --- Utility: Format Currency ---
 const formatPKR = (amount) => {
@@ -43,7 +44,8 @@ const NewArrivalsSection = () => {
 
         const formattedData = data.map((item) => ({
           ...item,
-          images_urls: item.product_images?.map(img => supabase.storage.from("products").getPublicUrl(img.file_path).data.publicUrl) || []
+          // images_urls: item.product_images?.map(img => supabase.storage.from("products").getPublicUrl(img.file_path).data.publicUrl) || []
+          images_urls: item.product_images?.map(img => getOptimizedImageUrl(img.file_path)) || []
         }));
 
         setProducts(formattedData || []);

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { supabase } from "../api/supabase";
+import { getOptimizedImageUrl } from "../lib/imageUtils";
 import {
   Search,
   Package,
@@ -300,12 +301,7 @@ const OrderTracking = () => {
                   {order.order_items.map((item, index) => {
                     const product = item.products || {};
                     const images = product.product_images || [];
-                    const imageUrl =
-                      images.length > 0
-                        ? supabase.storage
-                            .from("products")
-                            .getPublicUrl(images[0].file_path).data.publicUrl
-                        : null;
+                    const imageUrl = images.length > 0 ? getOptimizedImageUrl(images[0].file_path) : null;
 
                     return (
                       <div

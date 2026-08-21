@@ -28,7 +28,7 @@ const Navbar = () => {
       to: "/shop?category=Stitched&page=1&collection=Summer+Classics",
     },
     { name: "New Arrivals", to: "/shop?collection=New+Arrivals" },
-    { name: "Sarees", to: "/shop?category=Sarees" },
+    // { name: "Sarees", to: "/shop?category=Sarees" },
   ];
 
   return (

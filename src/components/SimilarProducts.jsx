@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ShoppingBag, ArrowRight } from "lucide-react";
 import { supabase } from "../api/supabase";
+import { getOptimizedImageUrl } from "../lib/imageUtils";
 
 const formatPKR = (amount) => {
   return new Intl.NumberFormat("en-PK", {
@@ -39,11 +40,9 @@ const SimilarProductsSection = ({ currentProductId, collection }) => {
           const formattedData = data.map((item) => ({
             ...item,
             images_urls:
-              item.product_images?.map(
-                (img) =>
-                  supabase.storage.from("products").getPublicUrl(img.file_path)
-                    .data.publicUrl,
-              ) || [],
+  item.product_images?.map(
+    (img) => getOptimizedImageUrl(img.file_path)
+  ) || [],
           }));
           setProducts(formattedData);
         }

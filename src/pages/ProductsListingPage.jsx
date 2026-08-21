@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import { supabase } from "../api/supabase";
+import { getOptimizedImageUrl } from "../lib/imageUtils";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -82,7 +83,8 @@ const ProductCollection = () => {
 
         // A. Normalize Data
         const normalizedProducts = data.map((item) => {
-          const mappedUrls = item.product_images?.map(img => supabase.storage.from("products").getPublicUrl(img.file_path).data.publicUrl) || [];
+          // const mappedUrls = item.product_images?.map(img => supabase.storage.from("products").getPublicUrl(img.file_path).data.publicUrl) || [];
+          const mappedUrls = item.product_images?.map(img => getOptimizedImageUrl(img.file_path)) || [];
           return {
             ...item,
             // price: item.original_price,

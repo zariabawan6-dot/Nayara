@@ -85,7 +85,7 @@ const ProductCard = ({ product }) => {
 )}
 
 {/* New Arrival Badge */}
-{!outOfStock && product.collection === "New Arrivals" && (
+{!outOfStock && (product.collection === "New Arrivals" || salePrice === originalPrice) && (
   <span
     className={`absolute ${
       discountPercent > 0 ? "top-12" : "top-3"

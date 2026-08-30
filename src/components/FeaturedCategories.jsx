@@ -24,15 +24,15 @@ const FeaturedCategories = () => {
       link: "/shop?category=Stitched",
       className: "col-span-12 md:col-span-4",
     },
-    {
-      id: "sarees",
-      title: "Sarees",
-      description: "Timeless drapes, elegantly woven.",
-      // Traditional saree editorial shot
-      image: "/sareee.webp",
-      link: "/shop?category=Sarees",
-      className: "col-span-12 md:col-span-4",
-    },
+    // {
+    //   id: "sarees",
+    //   title: "Sarees",
+    //   description: "Timeless drapes, elegantly woven.",
+    //   // Traditional saree editorial shot
+    //   image: "/sareee.webp",
+    //   link: "/shop?category=Sarees",
+    //   className: "col-span-12 md:col-span-4",
+    // },
     {
       id: "sale",
       title: "Special Sale",

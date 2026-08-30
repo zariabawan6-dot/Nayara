@@ -52,6 +52,9 @@ const ProductPreview = () => {
   const { addToCart } = useCart();
   const { addToast } = useToast();
 
+  // Add this state near the top with other useState calls
+  const [showCartFloat, setShowCartFloat] = useState(false);
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
@@ -151,21 +154,41 @@ const ProductPreview = () => {
     }
   };
 
-  const handleAddToCart = () => {
-    if (product.is_out_of_stock) return;
+  // const handleAddToCart = () => {
+  //   if (product.is_out_of_stock) return;
 
-    const hasSizes = product.sizes && product.sizes.length > 0;
-    if (hasSizes && !selectedSize) {
-      setSizeError(true);
-      return;
-    }
+  //   const hasSizes = product.sizes && product.sizes.length > 0;
+  //   if (hasSizes && !selectedSize) {
+  //     setSizeError(true);
+  //     return;
+  //   }
 
-    addToCart(product, selectedSize);
-    addToast(
-      `${product.name}${selectedSize ? " - " + selectedSize : ""}`,
-      "success",
-    );
-  };
+  //   addToCart(product, selectedSize);
+  //   addToast(
+  //     `${product.name}${selectedSize ? " - " + selectedSize : ""}`,
+  //     "success",
+  //   );
+  // };
+
+  // Update handleAddToCart — replace the existing function
+const handleAddToCart = () => {
+  if (product.is_out_of_stock) return;
+
+  const hasSizes = product.sizes && product.sizes.length > 0;
+  if (hasSizes && !selectedSize) {
+    setSizeError(true);
+    return;
+  }
+
+  addToCart(product, selectedSize);
+  addToast(
+    `${product.name}${selectedSize ? " - " + selectedSize : ""}`,
+    "success",
+  );
+
+  // Show floating button
+  setShowCartFloat(true);
+};
 
   if (loading) {
     return (
@@ -542,6 +565,38 @@ const ProductPreview = () => {
         currentProductId={product.id}
         collection={product.collection}
       />
+
+      {/* Floating View Cart Button */}
+<AnimatePresence>
+  {showCartFloat && (
+    <motion.div
+      initial={{ y: 80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 80, opacity: 0 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90]"
+    >
+      <Link
+        to="/cart"
+        className="flex items-center gap-3 bg-[#111827] text-white pl-5 pr-6 py-3.5 rounded-sm shadow-2xl border border-[#D4AF37]/40 hover:bg-black transition-colors group"
+      >
+        <div className="relative">
+          <ShoppingBag size={20} className="text-[#D4AF37]" />
+          <span className="absolute -top-1.5 -right-1.5 bg-[#D4AF37] text-[#111827] text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+            ✓
+          </span>
+        </div>
+        <span className="text-sm font-semibold uppercase tracking-widest">
+          View Cart
+        </span>
+        <ChevronRight
+          size={15}
+          className="text-[#D4AF37] group-hover:translate-x-0.5 transition-transform"
+        />
+      </Link>
+    </motion.div>
+  )}
+</AnimatePresence>
 
       <AnimatePresence>
         {isZoomOpen && (

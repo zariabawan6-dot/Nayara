@@ -606,25 +606,52 @@ const CartPage = () => {
               </h2>
 
               <div className="space-y-6 text-sm text-gray-600 font-body">
-                <div className="flex justify-between items-center">
-                  <span>Subtotal</span>
-                  <span className="font-semibold text-[#111827]">
-                    PKR {formatPrice(subtotal)}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Delivery Charges</span>
-                  {deliveryCharges === 0 ? (
-                    <span className="text-[#111827] font-bold text-[10px] bg-[#D4AF37] px-2 py-1 rounded-sm uppercase tracking-widest">
-                      FREE
-                    </span>
-                  ) : (
-                    <span className="font-semibold text-[#111827]">
-                      PKR {formatPrice(deliveryCharges)}
-                    </span>
-                  )}
-                </div>
-              </div>
+  <div className="flex justify-between items-center">
+    <span>Subtotal</span>
+    <span className="font-semibold text-[#111827]">
+      PKR {formatPrice(subtotal)}
+    </span>
+  </div>
+  <div className="flex justify-between items-center">
+    <span>Delivery Charges</span>
+    {deliveryCharges === 0 ? (
+      <span className="text-[#111827] font-bold text-[10px] bg-[#D4AF37] px-2 py-1 rounded-sm uppercase tracking-widest">
+        FREE
+      </span>
+    ) : (
+      <span className="font-semibold text-[#111827]">
+        PKR {formatPrice(deliveryCharges)}
+      </span>
+    )}
+  </div>
+
+  {/* ✅ FREE SHIPPING PROGRESS BAR */}
+  <div className="pt-2">
+    {deliveryCharges === 0 ? (
+      <div className="flex items-center gap-2 text-[11px] font-semibold text-green-600 uppercase tracking-widest">
+        <Truck size={13} />
+        <span>You've unlocked free shipping! 🎉</span>
+      </div>
+    ) : (
+      <div>
+        <div className="flex justify-between text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-2">
+          <span className="flex items-center gap-1">
+            <Truck size={11} /> Free shipping at PKR 5,000
+          </span>
+          <span className="text-[#111827]">
+            PKR {formatPrice(5000 - subtotal)} away
+          </span>
+        </div>
+        <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-[#D4AF37] rounded-full transition-all duration-500"
+            style={{ width: `${Math.min((subtotal / 5000) * 100, 100)}%` }}
+          />
+        </div>
+      </div>
+    )}
+  </div>
+</div>
 
               <div className="border-t border-[#E5E7EB] my-8"></div>
 

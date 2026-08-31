@@ -30,7 +30,8 @@ const SimilarProductsSection = ({ currentProductId, collection }) => {
     "id, name, price, discount_price, category, collection, product_images(file_path)",
   )
   .neq("id", currentProductId)
-  .neq("category", "") 
+  .eq("collection", collection)
+  .or("is_published.eq.true,is_published.is.null")
   .order("created_at", { ascending: false })
   .limit(4);
 

@@ -59,11 +59,16 @@ const ProductCollection = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // const [filters, setFilters] = useState({
+  //   collection: [],
+  //   category: [],
+  //   priceRange: ["Under 3000", "3000 - 6000", "6000 - 10000", "Above 10000"],
+  // });
   const [filters, setFilters] = useState({
-    collection: [],
-    category: [],
-    priceRange: ["Under 3000", "3000 - 6000", "6000 - 10000", "Above 10000"],
-  });
+  collection: ["New Arrivals", "Summer Classics", "Winter Luxury"],
+  category: [],
+  priceRange: ["Under 3000", "3000 - 6000", "6000 - 10000", "Above 10000"],
+});
 
   useEffect(() => {
     const fetchInventory = async () => {

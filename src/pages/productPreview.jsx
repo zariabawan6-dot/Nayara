@@ -72,6 +72,7 @@ const ProductPreview = () => {
           .from("products")
           .select("*, product_images(file_path)")
           .eq("id", id)
+          .eq("is_published", true)
           .single();
 
         if (error) throw error;

@@ -65,7 +65,7 @@ const Navbar = () => {
       {/* Main Luxury Navbar */}
       <nav
         className={`w-full border-b border-[#E5E7EB] transition-all duration-500 ease-out bg-white/95 backdrop-blur-md
-          ${isScrolled ? "py-3 shadow-[0_1px_10px_rgba(0,0,0,0.02)]" : "py-6"}`}
+          ${isScrolled ? "py-2 shadow-[0_1px_10px_rgba(0,0,0,0.02)]" : "py-3"}`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 flex items-center justify-between">
           {/* Left Side: Brand Logo (Desktop) / Mobile Toggle */}
@@ -81,12 +81,12 @@ const Navbar = () => {
             {/* Desktop Left-Aligned Logo (nudged further left) */}
             <Link
               to="/"
-              className="hidden lg:flex items-center gap-3 group tracking-[0.25em] transition-transform duration-300 lg:-ml-4 xl:-ml-6"
+              className="hidden lg:flex items-center gap-0 group tracking-[0.25em] transition-transform duration-300 lg:-ml-4 xl:-ml-6"
             >
               <img
-                src="/NAYARA.jpeg"
+                src="/NAYARA.png"
                 alt="Nayara"
-                className="h-25 w-25 object-contain rounded-full transform group-hover:scale-[1.01] transition-transform"
+                className="h-23 w-23 object-contain transform group-hover:scale-[1.01] transition-transform"
               />
               <span className="font-serif text-2xl font-bold text-[#111827] tracking-[0.3em] uppercase block transform group-hover:scale-[1.01]">
                 Nayara
@@ -97,12 +97,12 @@ const Navbar = () => {
           {/* Mobile Center Logo */}
           <Link
             to="/"
-            className="lg:hidden absolute left-1/2 -translate-x-1/2 flex items-center gap-2 tracking-[0.25em]"
+            className="lg:hidden absolute left-1/2 -translate-x-1/2 flex items-center gap-0 tracking-[0.25em]"
           >
             <img
-              src="/NAYARA.jpeg"
+              src="/NAYARA.png"
               alt="Naa"
-              className="h-8 w-8 object-contain rounded-full"
+              className="h-22 w-22 object-contain"
             />
             <span className="font-serif text-xl font-bold text-[#111827] tracking-[0.25em] uppercase">
               Nayara
@@ -179,10 +179,11 @@ const Navbar = () => {
           <div className="px-6 py-6 border-b border-[#E5E7EB] flex justify-between items-center bg-[#FAF8F3]">
             <span className="flex items-center gap-2 font-serif text-xl font-bold tracking-[0.2em] text-[#111827] uppercase">
               <img
-                src="/NAYARA.jpeg"
+                src="/NAYARA.png"
                 alt="Nayara"
-                className="h-8 w-8 object-contain rounded-full"
-              />
+                // Replace
+                className="h-23 w-23 object-contain"
+              /> 
               Nayara
             </span>
             <button

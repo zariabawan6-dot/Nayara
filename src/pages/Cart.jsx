@@ -48,6 +48,8 @@ const CartPage = () => {
   const [showCitySuggestions, setShowCitySuggestions] = useState(false);
   const cityBoxRef = useRef(null);
 
+  const [checkoutTracked, setCheckoutTracked] = useState(false);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (cityBoxRef.current && !cityBoxRef.current.contains(e.target)) {
@@ -102,11 +104,32 @@ const CartPage = () => {
     }
   };
 
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({ ...prev, [name]: value }));
+  //   setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+  // };
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
-  };
+  const { name, value } = e.target;
+  setFormData((prev) => ({ ...prev, [name]: value }));
+  setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+
+  if (!checkoutTracked && cart.length > 0) {
+    fbTrack("InitiateCheckout", {
+      content_ids: cart.map((item) => item.id),
+      contents: cart.map((item) => ({
+        id: item.id,
+        quantity: item.quantity || 1,
+      })),
+      value: total,
+      currency: "PKR",
+      num_items: cart.length,
+      content_type: "product",
+    });
+    setCheckoutTracked(true);
+  }
+};
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
@@ -157,22 +180,22 @@ const CartPage = () => {
 
   const formatPrice = (price) => new Intl.NumberFormat("en-PK").format(price);
 
-  useEffect(() => {
-    if (cart.length > 0) {
-      fbTrack("InitiateCheckout", {
-        content_ids: cart.map((item) => item.id),
-        contents: cart.map((item) => ({
-          id: item.id,
-          quantity: item.quantity || 1,
-        })),
-        value: total,
-        currency: "PKR",
-        num_items: cart.length,
-        content_type: "product", // ✅ add this line
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   if (cart.length > 0) {
+  //     fbTrack("InitiateCheckout", {
+  //       content_ids: cart.map((item) => item.id),
+  //       contents: cart.map((item) => ({
+  //         id: item.id,
+  //         quantity: item.quantity || 1,
+  //       })),
+  //       value: total,
+  //       currency: "PKR",
+  //       num_items: cart.length,
+  //       content_type: "product", // ✅ add this line
+  //     });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   // --- SUBMIT ORDER ---
   const handleCheckout = async () => {

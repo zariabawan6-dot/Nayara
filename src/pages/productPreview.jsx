@@ -17,7 +17,7 @@ import {
   X,
   ZoomIn,
 } from "lucide-react";
-import { FaSquareWhatsapp } from "react-icons/fa6";
+import { FaSquareWhatsapp, FaTiktok } from "react-icons/fa6";
 import { supabase } from "../api/supabase";
 import SimilarProductsSection from "../components/SimilarProducts";
 import ProductReviews from "../components/ProductReviews";
@@ -447,16 +447,19 @@ const handleAddToCart = () => {
 </a>
              
               <div className="flex items-center gap-4">
-                <a href="https://wa.me/923166071102" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-600 transition-colors duration-300 hover:scale-110 transform">
-                  <FaSquareWhatsapp size={28} />
-                </a>
-                <a href="https://www.instagram.com/nayara_zone.pk" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-600 transition-colors duration-300 hover:scale-110 transform">
-                  <Instagram size={28} />
-                </a>
-                <a href="https://www.facebook.com/nayarazone" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 transition-colors duration-300 hover:scale-110 transform">
-                  <Facebook size={28} />
-                </a>
-              </div>
+  <a href="https://wa.me/923166071102" target="_blank" rel="noopener noreferrer" className="text-green-500 hover:text-green-600 transition-colors duration-300 hover:scale-110 transform">
+    <FaSquareWhatsapp size={28} />
+  </a>
+  <a href="https://www.instagram.com/nayara_zone.pk" target="_blank" rel="noopener noreferrer" className="text-pink-500 hover:text-pink-600 transition-colors duration-300 hover:scale-110 transform">
+    <Instagram size={28} />
+  </a>
+  <a href="https://www.facebook.com/nayarazone" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 transition-colors duration-300 hover:scale-110 transform">
+    <Facebook size={28} />
+  </a>
+  <a href="https://www.tiktok.com/@nayara.zone" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-black transition-colors duration-300 hover:scale-110 transform">
+    <FaTiktok size={28} />
+  </a>
+</div>
             </div>
 
             <div className="flex items-center gap-2 text-gray-400 text-xs mb-8 italic">

@@ -16,11 +16,19 @@ import WhatsAppButton from "./components/WhatsAppButton";
 function App() {
   const location = useLocation();
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && typeof window.fbq === "function") {
-      window.fbq("track", "PageView");
-    }
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined" && typeof window.fbq === "function") {
+  //     window.fbq("track", "PageView");
+  //   }
+  // }, [location.pathname]);
+
+useEffect(() => {
+  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+
+  if (typeof window !== "undefined" && typeof window.fbq === "function") {
+    window.fbq("track", "PageView");
+  }
+}, [location.pathname, location.search]);
 
   return (
     <>

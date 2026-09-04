@@ -155,9 +155,19 @@ const ProductCollection = () => {
       result = result.filter((p) => p.fabric === activeFabric);
     }
 
+    // if (activeCollection) {
+    //   result = result.filter((p) => p.collection === activeCollection);
+    // }
+
     if (activeCollection) {
-      result = result.filter((p) => p.collection === activeCollection);
-    }
+  if (activeCollection === "New Arrivals") {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    result = result.filter((p) => new Date(p.created_at) >= thirtyDaysAgo);
+  } else {
+    result = result.filter((p) => p.collection === activeCollection);
+  }
+}
 
     if (activeCategory) result = result.filter((p) => p.category === activeCategory);
 

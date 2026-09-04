@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail, Clock, Instagram, Facebook } from "lucide-react";
 import { IoLogoWhatsapp } from "react-icons/io";
+import { FaTiktok } from "react-icons/fa";
 
 const Footer = () => {
   const linkClass =
@@ -54,11 +55,11 @@ const Footer = () => {
         3 Piece Unstitched
       </Link>
     </li>
-    <li>
+    {/* <li>
       <Link to="/shop?category=Sarees" className={linkClass}>
         Sarees
       </Link>
-    </li>
+    </li> */}
   </ul>
 </div>
 
@@ -138,7 +139,11 @@ const Footer = () => {
             <a href="https://www.facebook.com/Nayarazone" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
               <Facebook className={iconClass} />
             </a>
-          
+            
+             <a href="https://www.tiktok.com/@nayara.zone" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+  <FaTiktok className={iconClass} />
+</a>
+
             <a href="https://wa.me/923166071102" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
               <IoLogoWhatsapp className={iconClass} />
             </a>

@@ -78,10 +78,21 @@ import { fbTrack } from "../lib/fbPixel";
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
+  // const [cart, setCart] = useState(() => {
+  //   const saved = localStorage.getItem("cart");
+  //   return saved ? JSON.parse(saved) : [];
+  // });
   const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem("cart");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const saved = localStorage.getItem("cart");
+  if (!saved) return [];
+  const parsed = JSON.parse(saved);
+  // Fix old cart items that have "Standard" size string → normalize to null
+  return parsed.map(item => ({
+    ...item,
+    // size: item.size === "Standard" ? null : item.size
+    size: item.size ?? null 
+  }));
+});
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -112,23 +123,41 @@ export function CartProvider({ children }) {
   };
 
   // Remove Item Completely (must match id AND size)
+  // const removeFromCart = (id, size = null) => {
+  //   setCart((prev) =>
+  //     prev.filter((item) => !(item.id === id && item.size === size))
+  //   );
+  // };
+
   const removeFromCart = (id, size = null) => {
-    setCart((prev) =>
-      prev.filter((item) => !(item.id === id && item.size === size))
-    );
-  };
+  setCart((prev) =>
+    prev.filter((item) => !(item.id === id && (item.size ?? null) === (size ?? null)))
+  );
+};
 
   // Update Quantity (must match id AND size)
+  // const updateQuantity = (id, size, newQuantity) => {
+  //   if (newQuantity < 1) return;
+  //   setCart((prev) =>
+  //     prev.map((item) =>
+  //       item.id === id && item.size === size
+  //         ? { ...item, quantity: newQuantity }
+  //         : item
+  //     )
+  //   );
+  // };
   const updateQuantity = (id, size, newQuantity) => {
-    if (newQuantity < 1) return;
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id && item.size === size
-          ? { ...item, quantity: newQuantity }
-          : item
-      )
-    );
-  };
+  if (newQuantity < 1) return;
+  setCart((prev) =>
+    prev.map((item) =>
+      item.id === id && (item.size ?? null) === (size ?? null)
+        ? { ...item, quantity: newQuantity }
+        : item
+    )
+  );
+};
+
+
 
   const clearCart = () => setCart([]);
 

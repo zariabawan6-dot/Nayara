@@ -8,7 +8,6 @@ import {
   ShieldCheck,
   MapPin,
   Truck,
-  Mail,
   Loader2,
   CheckCircle,
   ArrowLeft,
@@ -53,7 +52,7 @@ const CartPage = () => {
 
   // Form State
   const [formData, setFormData] = useState({
-    fullName: "", phone: "", email: "", address: "", city: "", region: "",
+    fullName: "", phone: "", address: "", city: "", region: "",
   });
   const [errors, setErrors] = useState({});
   const [cityQuery, setCityQuery] = useState("");
@@ -137,10 +136,6 @@ const CartPage = () => {
         if (!/^(\+92|0)3\d{9}$/.test(d)) return "Enter a valid Pakistani mobile number (e.g. 0300 1234567).";
         return "";
       }
-      case "email":
-        if (!value.trim()) return "Email address is required.";
-        if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(value.trim())) return "Enter a valid email address.";
-        return "";
       case "region":
         if (!value) return "Please select a region.";
         return "";
@@ -205,7 +200,6 @@ const CartPage = () => {
     const newErrors = {
       fullName: validateField("fullName", formData.fullName),
       phone: validateField("phone", formData.phone),
-      email: validateField("email", formData.email),
       region: validateField("region", formData.region),
       city: validateField("city", formData.city),
       address: validateField("address", formData.address),
@@ -223,7 +217,6 @@ const CartPage = () => {
         region: formData.region,
         city: formData.city,
         phone: formData.phone,
-        mail: formData.email,
         address: formData.address,
         status: "Pending",
         payment_method: "COD",
@@ -390,6 +383,10 @@ const CartPage = () => {
               </div>
 
               {/* Deal: Buy More Save More */}
+
+              <p className="text-center text-[#D4AF37] text-xs font-bold uppercase tracking-widest mb-4 animate-pulse">
+  👇 Click below to unlock your deal!
+</p>
               <button
                 onClick={() => handleSelectDeal("buyMore")}
                 className={`w-full text-left p-5 rounded-sm border-2 transition-all duration-200 relative overflow-hidden ${
@@ -428,6 +425,10 @@ const CartPage = () => {
 
             {/* ─── 10,000+ BONUS PERK ────────────────────────────── */}
             {isAbove10k && (
+              <>
+    <p className="text-center text-[#D4AF37] text-xs font-bold uppercase tracking-widest mb-4 animate-pulse">
+      👇 Click below to unlock your deal!
+    </p>
               <div className="bg-white rounded-sm shadow-sm border-2 border-[#D4AF37]/40 p-6 md:p-8 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#D4AF37] to-[#f0cc6a]" />
                 <div className="flex items-center gap-3 mb-6 border-b border-[#E5E7EB] pb-5">
@@ -495,6 +496,7 @@ const CartPage = () => {
                   Free delivery included with both options
                 </p>
               </div>
+              </>
             )}
 
             {/* Shipping Form */}
@@ -525,14 +527,7 @@ const CartPage = () => {
                   {errors.phone && <p className="text-red-500 text-xs mt-2">{errors.phone}</p>}
                 </div>
 
-                <div className="col-span-2">
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3">Email Address</label>
-                  <div className="relative">
-                    <input type="email" name="email" value={formData.email} onChange={handleInputChange} onBlur={handleBlur} placeholder="email@example.com" className={`${inputBase} pl-12 ${errors.email ? inputErr : inputOk}`} />
-                    <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                  </div>
-                  {errors.email && <p className="text-red-500 text-xs mt-2">{errors.email}</p>}
-                </div>
+              
 
                 <div className="col-span-2 md:col-span-1">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3">Region / Province</label>

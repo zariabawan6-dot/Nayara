@@ -339,7 +339,7 @@ const handleAddToCart = () => {
   </div>
   <div className="flex items-center gap-2 text-xs text-red-500 font-semibold uppercase tracking-widest">
     <Clock size={14} />
-    <span>⚡ Limited Stock ? Order Now!</span>
+    <span>✨ Order Now — Cash on Delivery Available Nationwide!</span>
   </div>
 
 </div>

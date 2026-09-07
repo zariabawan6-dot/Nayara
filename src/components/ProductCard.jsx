@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   const [hovered, setHovered] = useState(false);
-  const { addToCart } = useCart();
+  const { addToCart, setShowCartFloat } = useCart();
   const { addToast } = useToast();
 
   const outOfStock = product.is_out_of_stock;
@@ -33,6 +33,7 @@ const ProductCard = ({ product }) => {
     e.preventDefault();
     addToCart(product, null);
     addToast(`${product.name} - ${product.color || "Standard"}`, "success");
+    setShowCartFloat(true); // 👈 add this
   };
 
   return (
@@ -65,7 +66,7 @@ const ProductCard = ({ product }) => {
           </div>
         )}
 
-        {/* Quick Add / Select Size Overlay */}
+        {/* Quick Add / Select Size Overlay
         {!outOfStock && (
           <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gradient-to-t from-black/20 to-transparent">
             <button
@@ -75,7 +76,22 @@ const ProductCard = ({ product }) => {
               {hasSizes ? "Select Size" : "Add to Bag"}
             </button>
           </div>
-        )}
+        )} */}
+
+        {/* Quick Add / Select Size Overlay */}
+{!outOfStock && (
+  <div className="absolute inset-x-0 bottom-0 p-4 
+    opacity-100 md:opacity-0 md:translate-y-4 
+    group-hover:opacity-100 group-hover:translate-y-0 
+    transition-all duration-300 bg-gradient-to-t from-black/20 to-transparent">
+    <button
+      onClick={handleAddToCart}
+      className="w-full bg-white text-[#111827] font-semibold py-3 rounded-sm text-xs uppercase tracking-widest hover:bg-[#111827] hover:text-white transition-colors flex items-center justify-center gap-2 shadow-md"
+    >
+      {hasSizes ? "Select Size" : "Add to Bag"}
+    </button>
+  </div>
+)}
 
         {/* Discount Badge */}
 {!outOfStock && discountPercent > 0 && (

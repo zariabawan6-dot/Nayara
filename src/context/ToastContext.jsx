@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
+import { Link } from "react-router-dom"; // add this at the top if not already
 import { X, CheckCircle, ShoppingBag } from "lucide-react";
 
 const ToastContext = createContext();
@@ -52,7 +53,7 @@ export const ToastProvider = ({ children }) => {
               )}
             </div>
 
-            {/* Content */}
+            {/* Content
             <div className="flex-1">
               <h4 className="font-serif text-sm font-semibold text-gray-900">
                 {toast.message}
@@ -60,7 +61,28 @@ export const ToastProvider = ({ children }) => {
               <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">
                 {toast.type === "success" ? "Added to Bag" : "Notice"}
               </p>
-            </div>
+            </div> */}
+
+            {/* Content */}
+<div className="flex-1">
+  <h4 className="font-serif text-sm font-semibold text-gray-900">
+    {toast.message}
+  </h4>
+  <div className="flex items-center gap-2 mt-0.5">
+    <p className="text-xs text-gray-500 line-clamp-1">
+      {toast.type === "success" ? "Added to Bag" : "Notice"}
+    </p>
+    {toast.type === "success" && (
+      <Link
+        to="/cart"
+        className="text-xs font-semibold text-[#111827] underline underline-offset-2 hover:text-[#D4AF37] transition-colors"
+      >
+        View Cart →
+      </Link>
+    )}
+  </div>
+</div>
+
 
             {/* Close Button */}
             <button

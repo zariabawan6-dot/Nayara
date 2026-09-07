@@ -82,6 +82,7 @@ export function CartProvider({ children }) {
   //   const saved = localStorage.getItem("cart");
   //   return saved ? JSON.parse(saved) : [];
   // });
+
   const [cart, setCart] = useState(() => {
   const saved = localStorage.getItem("cart");
   if (!saved) return [];
@@ -93,6 +94,8 @@ export function CartProvider({ children }) {
     size: item.size ?? null 
   }));
 });
+
+  const [showCartFloat, setShowCartFloat] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -170,6 +173,8 @@ export function CartProvider({ children }) {
         updateQuantity,
         clearCart,
         cartLength: cart?.length,
+        showCartFloat,        // 👈 add this
+        setShowCartFloat,     // 👈 add this
       }}
     >
       {children}

@@ -12,9 +12,14 @@ import OrderTracking from "./pages/OrderTracking";
 import Footer from "./components/Footer";
 import { fbTrack } from "./lib/fbPixel";
 import WhatsAppButton from "./components/WhatsAppButton";
+import { Link } from "react-router-dom";
+import { useCart } from "./context/cartContext";
+import { ShoppingBag, ChevronRight } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 
 function App() {
   const location = useLocation();
+  const { showCartFloat } = useCart();
 
   // useEffect(() => {
   //   if (typeof window !== "undefined" && typeof window.fbq === "function") {
@@ -47,7 +52,37 @@ useEffect(() => {
             <Route path="/order-tracking" element={<OrderTracking />} />
           </Routes>
         </main>
-
+         
+         <AnimatePresence>
+  {showCartFloat && (
+    <motion.div
+      initial={{ y: 80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 80, opacity: 0 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90]"
+    >
+      <Link
+        to="/cart"
+        className="flex items-center gap-3 bg-[#111827] text-white pl-5 pr-6 py-3.5 rounded-sm shadow-2xl border border-[#D4AF37]/40 hover:bg-black transition-colors group"
+      >
+        <div className="relative">
+          <ShoppingBag size={20} className="text-[#D4AF37]" />
+          <span className="absolute -top-1.5 -right-1.5 bg-[#D4AF37] text-[#111827] text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+            ✓
+          </span>
+        </div>
+        <span className="text-sm font-semibold uppercase tracking-widest">
+          View Cart
+        </span>
+        <ChevronRight
+          size={15}
+          className="text-[#D4AF37] group-hover:translate-x-0.5 transition-transform"
+        />
+      </Link>
+    </motion.div>
+  )}
+</AnimatePresence>
         <Footer />
 
         <WhatsAppButton

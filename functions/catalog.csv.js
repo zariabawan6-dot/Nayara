@@ -6,7 +6,12 @@ export async function onRequest(context) {
     const res = await fetch(upstreamUrl, {
       method: "GET",
       headers: {
-        "Cache-Control": "no-cache",
+        "Cache-Control": "no-cache, no-store",
+        "Pragma": "no-cache",
+      },
+      cf: {
+        cacheTtl: 0,
+        cacheEverything: false,
       },
     });
 
@@ -18,9 +23,10 @@ export async function onRequest(context) {
         "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": "inline",
         "Cache-Control":
-          "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+          "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0",
         "Pragma": "no-cache",
         "Expires": "0",
+        "Surrogate-Control": "no-store",
       },
     });
   } catch (error) {

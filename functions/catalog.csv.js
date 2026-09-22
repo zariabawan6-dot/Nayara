@@ -12,7 +12,7 @@ export async function onRequest(context) {
   return new Response(csv, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Cache-Control": "no-cache, no-store, must-revalidate",  // 👈 no caching
+      "Cache-Control": "no-cache, no-store, must-revalidate",  // 👈 no cachin
       "Pragma": "no-cache",
     },
   });

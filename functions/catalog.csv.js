@@ -17,7 +17,8 @@ export async function onRequest(context) {
       headers: {
         "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": "inline",
-        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+        "Cache-Control":
+          "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
         "Pragma": "no-cache",
         "Expires": "0",
       },

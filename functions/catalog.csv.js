@@ -1,35 +1,43 @@
 export async function onRequest(context) {
-  const res = await fetch(
-    "https://dioqjijhqewpznwxwqap.supabase.co/functions/v1/clever-api",
-    {
+  const upstreamUrl =
+    "https://dioqjijhqewpznwxwqap.supabase.co/functions/v1/clever-api";
+
+  try {
+    const res = await fetch(upstreamUrl, {
+      method: "GET",
       headers: {
-        'Cache-Control': 'no-cache',  // 👈 forces fresh data every time
+        "Cache-Control": "no-cache",
+      },
+      cf: {
+        cacheTtl: 0,
+        cacheEverything: false,
+      },
+    });
+
+    const csv = await res.text();
+
+    return new Response(csv, {
+      status: res.status,
+      headers: {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      },
+    });
+  } catch (error) {
+    return new Response(
+      JSON.stringify({
+        error: "Failed to fetch catalog",
+        message: error.message,
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-store",
+        },
       }
-    }
-  );
-  const csv = await res.text();
-
-  return new Response(csv, {
-    headers: {
-      "Content-Type": "text/csv; charset=utf-8",
-      "Cache-Control": "no-cache, no-store, must-revalidate",  // 👈 no cachin
-      "Pragma": "no-cache",
-    },
-  });
+    );
+  }
 }
-
-
-
-// export async function onRequest(context) {
-//   const res = await fetch(
-//     "https://dioqjijhqewpznwxwqap.supabase.co/functions/v1/clever-api"
-//   );
-//   const csv = await res.text();
-
-//   return new Response(csv, {
-//     headers: {
-//       "Content-Type": "text/csv; charset=utf-8",
-//       "Cache-Control": "public, max-age=300",
-//     },
-//   });
-// }

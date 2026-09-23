@@ -86,7 +86,7 @@ const ProductPreview = () => {
         if (error) throw error;
 
         const mappedUrls =
-          data.product_images?.map((img) => getOptimizedImageUrl(img.file_path)) ||
+          data.product_images?.map((img) => getOptimizedImageUrl(img.file_path, 900)) ||
           [];
         data.images_urls = mappedUrls;
 
@@ -165,7 +165,7 @@ const ProductPreview = () => {
   const handleSelectColor = (c) => {
     setSelectedColor(c.name);
     setColorError(false);
-    if (c.image) setSelectedImage(getOptimizedImageUrl(c.image));
+    if (c.image) setSelectedImage(getOptimizedImageUrl(c.image, 900));
   };
 
   const handleAddToCart = () => {
@@ -188,7 +188,7 @@ const ProductPreview = () => {
 
     // Put the chosen colour's photo first so the cart shows the right picture
     const chosen = colorList.find((c) => c.name === selectedColor);
-    const colorImg = chosen?.image ? getOptimizedImageUrl(chosen.image) : null;
+    const colorImg = chosen?.image ? getOptimizedImageUrl(chosen.image, 900) : null;
     const gallery = colorImg
       ? [colorImg, ...product.images_urls.filter((u) => u !== colorImg)]
       : product.images_urls;

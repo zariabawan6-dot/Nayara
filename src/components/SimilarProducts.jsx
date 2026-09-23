@@ -42,7 +42,7 @@ const SimilarProductsSection = ({ currentProductId, collection }) => {
             ...item,
             images_urls:
   item.product_images?.map(
-    (img) => getOptimizedImageUrl(img.file_path)
+    (img) => getOptimizedImageUrl(img.file_path, 400)
   ) || [],
           }));
           setProducts(formattedData);

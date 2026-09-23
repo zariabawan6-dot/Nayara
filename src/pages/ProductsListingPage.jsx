@@ -78,7 +78,7 @@ const ProductCollection = () => {
         if (error) throw error;
 
         const normalizedProducts = data.map((item) => {
-          const mappedUrls = item.product_images?.map(img => getOptimizedImageUrl(img.file_path)) || [];
+          const mappedUrls = item.product_images?.map(img => getOptimizedImageUrl(img.file_path, 400)) || [];
           return {
             ...item,
             images_urls: mappedUrls,
@@ -178,9 +178,21 @@ const ProductCollection = () => {
       else if (activePrice === "Above 10000") result = result.filter((p) => p.discount_price > 10000);
     }
 
-    if (sortBy === "price_low") result.sort((a, b) => a.discount_price - b.discount_price);
-    else if (sortBy === "price_high") result.sort((a, b) => b.discount_price - a.discount_price);
-    else result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    // if (sortBy === "price_low") result.sort((a, b) => a.discount_price - b.discount_price);
+    // else if (sortBy === "price_high") result.sort((a, b) => b.discount_price - a.discount_price);
+    // else result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    if (sortBy === "price_low") {
+  result.sort((a, b) => a.discount_price - b.discount_price);
+} else if (sortBy === "price_high") {
+  result.sort((a, b) => b.discount_price - a.discount_price);
+} else {
+  result.sort((a, b) => {
+    if (b.is_featured !== a.is_featured) {
+      return (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0);
+    }
+    return new Date(b.created_at) - new Date(a.created_at);
+  });
+}
 
     return result;
   }, [products, activeCategory, activeFabric, activeCollection, activePrice, searchQuery, sortBy]);

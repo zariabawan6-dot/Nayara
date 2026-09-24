@@ -334,7 +334,7 @@ const ProductPreview = () => {
                         (c) =>
                           c.image &&
                           !c.out_of_stock &&
-                          getOptimizedImageUrl(c.image) === img
+                          getOptimizedImageUrl(c.image, 900) === img
                       );
                       if (match) {
                         setSelectedColor(match.name);

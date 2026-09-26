@@ -1,5 +1,5 @@
 ﻿// src/pages/ProductPreview.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -65,6 +65,10 @@ const ProductPreview = () => {
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [viewers, setViewers] = useState(0);
 
+  // Tracks whether the customer has manually picked a colour/photo,
+  // so the auto-rotation stops respecting their choice.
+  const userInteractedRef = useRef(false);
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -75,6 +79,7 @@ const ProductPreview = () => {
         setColorError(false);
         setSelectedSize(null);
         setSizeError(false);
+        userInteractedRef.current = false;
 
         const { data, error } = await supabase
           .from("products")
@@ -144,6 +149,27 @@ const ProductPreview = () => {
     return () => clearInterval(interval);
   }, [id]);
 
+  // ---- Auto-rotate the preview photo through colour variants every 3s ----
+  useEffect(() => {
+    if (!product) return;
+
+    const colorList = product.colors || [];
+    const rotatable = colorList.filter((c) => c.image && !c.out_of_stock);
+
+    if (rotatable.length <= 1) return;
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (userInteractedRef.current) return; // customer picked a colour manually, stop overriding it
+      index = (index + 1) % rotatable.length;
+      const c = rotatable[index];
+      setSelectedColor(c.name);
+      setSelectedImage(getOptimizedImageUrl(c.image, 900));
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [product]);
+
   const handleShare = async () => {
     if (navigator.share && product) {
       try {
@@ -163,6 +189,7 @@ const ProductPreview = () => {
 
   // Clicking a colour: select it and show that colour's photo
   const handleSelectColor = (c) => {
+    userInteractedRef.current = true;
     setSelectedColor(c.name);
     setColorError(false);
     if (c.image) setSelectedImage(getOptimizedImageUrl(c.image, 900));
@@ -328,6 +355,7 @@ const ProductPreview = () => {
                   <button
                     key={index}
                     onClick={() => {
+                      userInteractedRef.current = true;
                       setSelectedImage(img);
                       // If this photo belongs to a colour, select that colour too
                       const match = colors.find(
@@ -744,11 +772,7 @@ export default ProductPreview;
 
 
 
-
-
-
-
-
+// // src/pages/ProductPreview.jsx
 // import React, { useState, useEffect } from "react";
 // import { Link, useParams } from "react-router-dom";
 // import { motion, AnimatePresence } from "framer-motion";
@@ -776,6 +800,7 @@ export default ProductPreview;
 // import { useToast } from "../context/ToastContext";
 // import { fbTrack } from "../lib/fbPixel";
 // import { getOptimizedImageUrl } from "../lib/imageUtils";
+// import { getPricing, swatchFor } from "../lib/colors";
 
 // const formatPKR = (amount) => {
 //   return new Intl.NumberFormat("en-PK", {
@@ -803,13 +828,14 @@ export default ProductPreview;
 //   const { addToCart } = useCart();
 //   const { addToast } = useToast();
 
-//   // Add this state near the top with other useState calls
 //   const [showCartFloat, setShowCartFloat] = useState(false);
 
 //   const [selectedImage, setSelectedImage] = useState(null);
 //   const [isWishlisted, setIsWishlisted] = useState(false);
 //   const [selectedSize, setSelectedSize] = useState(null);
 //   const [sizeError, setSizeError] = useState(false);
+//   const [selectedColor, setSelectedColor] = useState(null);
+//   const [colorError, setColorError] = useState(false);
 //   const [isZoomOpen, setIsZoomOpen] = useState(false);
 //   const [viewers, setViewers] = useState(0);
 
@@ -818,6 +844,11 @@ export default ProductPreview;
 //       try {
 //         setLoading(true);
 //         setError(null);
+//         // new product -> start with a clean selection
+//         setSelectedColor(null);
+//         setColorError(false);
+//         setSelectedSize(null);
+//         setSizeError(false);
 
 //         const { data, error } = await supabase
 //           .from("products")
@@ -828,10 +859,9 @@ export default ProductPreview;
 
 //         if (error) throw error;
 
-//        const mappedUrls =
-//   data.product_images?.map(
-//     (img) => getOptimizedImageUrl(img.file_path)
-//   ) || [];
+//         const mappedUrls =
+//           data.product_images?.map((img) => getOptimizedImageUrl(img.file_path, 900)) ||
+//           [];
 //         data.images_urls = mappedUrls;
 
 //         setProduct(data);
@@ -873,7 +903,6 @@ export default ProductPreview;
 //     };
 //   }, [isZoomOpen]);
 
-//   // ?? ADD HERE
 //   useEffect(() => {
 //     const randomViewers = Math.floor(Math.random() * (35 - 8 + 1)) + 8;
 //     setViewers(randomViewers);
@@ -906,41 +935,59 @@ export default ProductPreview;
 //     }
 //   };
 
-//   // const handleAddToCart = () => {
-//   //   if (product.is_out_of_stock) return;
+//   // Clicking a colour: select it and show that colour's photo
+//   const handleSelectColor = (c) => {
+//     setSelectedColor(c.name);
+//     setColorError(false);
+//     if (c.image) setSelectedImage(getOptimizedImageUrl(c.image, 900));
+//   };
 
-//   //   const hasSizes = product.sizes && product.sizes.length > 0;
-//   //   if (hasSizes && !selectedSize) {
-//   //     setSizeError(true);
-//   //     return;
-//   //   }
+//   const handleAddToCart = () => {
+//     if (product.is_out_of_stock) return;
 
-//   //   addToCart(product, selectedSize);
-//   //   addToast(
-//   //     `${product.name}${selectedSize ? " - " + selectedSize : ""}`,
-//   //     "success",
-//   //   );
-//   // };
+//     const colorList = product.colors || [];
+//     const hasColors = colorList.length > 0;
+//     const hasSizes = product.sizes && product.sizes.length > 0;
 
-//   // Update handleAddToCart — replace the existing function
-// const handleAddToCart = () => {
-//   if (product.is_out_of_stock) return;
+//     if (hasColors && !selectedColor) {
+//       setColorError(true);
+//       return;
+//     }
+//     if (hasSizes && !selectedSize) {
+//       setSizeError(true);
+//       return;
+//     }
 
-//   const hasSizes = product.sizes && product.sizes.length > 0;
-//   if (hasSizes && !selectedSize) {
-//     setSizeError(true);
-//     return;
-//   }
+//     const { price, sale } = getPricing(product, selectedColor);
 
-//   addToCart(product, selectedSize);
-//   addToast(
-//     `${product.name}${selectedSize ? " - " + selectedSize : ""}`,
-//     "success",
-//   );
+//     // Put the chosen colour's photo first so the cart shows the right picture
+//     const chosen = colorList.find((c) => c.name === selectedColor);
+//     const colorImg = chosen?.image ? getOptimizedImageUrl(chosen.image, 900) : null;
+//     const gallery = colorImg
+//       ? [colorImg, ...product.images_urls.filter((u) => u !== colorImg)]
+//       : product.images_urls;
 
-//   // Show floating button
-//   setShowCartFloat(true);
-// };
+//     addToCart(
+//       {
+//         ...product,
+//         price,
+//         discount_price: sale,
+//         images_urls: gallery,
+//         image: gallery[0],
+//       },
+//       selectedSize,
+//       selectedColor
+//     );
+
+//     addToast(
+//       `${product.name}${selectedColor ? " - " + selectedColor : ""}${
+//         selectedSize ? " - " + selectedSize : ""
+//       }`,
+//       "success"
+//     );
+
+//     setShowCartFloat(true);
+//   };
 
 //   if (loading) {
 //     return (
@@ -965,7 +1012,10 @@ export default ProductPreview;
 //           <h2 className="text-xl text-[#111827] font-display">
 //             {error || "Product not found"}
 //           </h2>
-//           <a href="/shop" className="text-[#111827] text-sm uppercase tracking-widest font-semibold border-b border-[#111827] hover:text-[#D4AF37] hover:border-[#D4AF37] transition-colors">
+//           <a
+//             href="/shop"
+//             className="text-[#111827] text-sm uppercase tracking-widest font-semibold border-b border-[#111827] hover:text-[#D4AF37] hover:border-[#D4AF37] transition-colors"
+//           >
 //             Return to Shop
 //           </a>
 //         </div>
@@ -973,11 +1023,19 @@ export default ProductPreview;
 //     );
 //   }
 
+//   // ---- values that depend on the loaded product / chosen colour ----
+//   const colors = product.colors || [];
+//   const hasColors = colors.length > 0;
+
+//   // Price for the chosen colour (or the normal product price until one is chosen)
+//   const { price: displayPrice, sale: displaySale } = getPricing(
+//     product,
+//     selectedColor
+//   );
+
 //   const discountPercentage =
-//     product.price > product.discount_price
-//       ? Math.round(
-//           ((product.price - product.discount_price) / product.price) * 100,
-//         )
+//     displayPrice > displaySale
+//       ? Math.round(((displayPrice - displaySale) / displayPrice) * 100)
 //       : 0;
 
 //   const descriptionImage =
@@ -986,7 +1044,8 @@ export default ProductPreview;
 //       : product.images_urls[0];
 
 //   const hasSizes = product.sizes && product.sizes.length > 0;
-//   const outOfStock = product.is_out_of_stock;
+//   const outOfStock =
+//     product.is_out_of_stock || (hasColors && colors.every((c) => c.out_of_stock));
 
 //   return (
 //     <div className="min-h-screen bg-[#FAF8F3] font-body pb-16">
@@ -1042,14 +1101,28 @@ export default ProductPreview;
 //                 {product.images_urls.map((img, index) => (
 //                   <button
 //                     key={index}
-//                     onClick={() => setSelectedImage(img)}
+//                     onClick={() => {
+//                       setSelectedImage(img);
+//                       // If this photo belongs to a colour, select that colour too
+//                       const match = colors.find(
+//                         (c) =>
+//                           c.image &&
+//                           !c.out_of_stock &&
+//                           getOptimizedImageUrl(c.image, 900) === img
+//                       );
+//                       if (match) {
+//                         setSelectedColor(match.name);
+//                         setColorError(false);
+//                       }
+//                     }}
 //                     className={`relative flex-shrink-0 w-20 h-24 rounded-sm overflow-hidden border transition-all duration-300 ${
 //                       selectedImage === img
 //                         ? "border-[#111827] ring-1 ring-[#111827]"
 //                         : "border-transparent opacity-60 hover:opacity-100"
 //                     }`}
 //                   >
-//                     <img loading="lazy"
+//                     <img
+//                       loading="lazy"
 //                       src={img}
 //                       alt={`View ${index + 1}`}
 //                       className="w-full h-full object-cover"
@@ -1083,35 +1156,75 @@ export default ProductPreview;
 //                   <span>Currently Out of Stock</span>
 //                 </div>
 //               ) : (
-//                <div className="flex flex-col gap-2">
-//   <div className="flex items-center gap-2 text-xs text-green-600 font-semibold uppercase tracking-widest">
-//     <CheckCircle2 size={14} />
-//     <span>In Stock & Ready to Ship</span>
-//   </div>
-//   <div className="flex items-center gap-2 text-xs text-red-500 font-semibold uppercase tracking-widest">
-//     <Clock size={14} />
-//     <span>✨ Order Now — Cash on Delivery Available Nationwide!</span>
-//   </div>
-
-// </div>
+//                 <div className="flex flex-col gap-2">
+//                   <div className="flex items-center gap-2 text-xs text-green-600 font-semibold uppercase tracking-widest">
+//                     <CheckCircle2 size={14} />
+//                     <span>In Stock & Ready to Ship</span>
+//                   </div>
+//                   <div className="flex items-center gap-2 text-xs text-red-500 font-semibold uppercase tracking-widest">
+//                     <Clock size={14} />
+//                     <span>✨ Order Now — Cash on Delivery Available Nationwide!</span>
+//                   </div>
+//                 </div>
 //               )}
 //             </div>
 
-//           <div className="mb-8 border-b border-[#E5E7EB] pb-8">
-//   <div className="flex items-baseline gap-4 mb-3">
-//     <span className="text-3xl font-semibold text-[#111827]">
-//       {formatPKR(product.discount_price)}
-//     </span>
-//     {product.price > product.discount_price && (
-//       <span className="text-lg text-gray-400 line-through decoration-gray-400">
-//         {formatPKR(product.price)}
-//       </span>
-//     )}
-//   </div>
-//   <div className="flex items-center gap-2 text-xs text-orange-500 font-semibold uppercase tracking-widest animate-pulse">
-//     <span>👁 {viewers} people viewing this right now</span>
-//   </div>
-// </div>
+//             <div className="mb-8 border-b border-[#E5E7EB] pb-8">
+//               <div className="flex items-baseline gap-4 mb-3">
+//                 <span className="text-3xl font-semibold text-[#111827]">
+//                   {formatPKR(displaySale)}
+//                 </span>
+//                 {displayPrice > displaySale && (
+//                   <span className="text-lg text-gray-400 line-through decoration-gray-400">
+//                     {formatPKR(displayPrice)}
+//                   </span>
+//                 )}
+//               </div>
+//               <div className="flex items-center gap-2 text-xs text-orange-500 font-semibold uppercase tracking-widest animate-pulse">
+//                 <span>👁 {viewers} people viewing this right now</span>
+//               </div>
+//             </div>
+
+//             {/* ---------- COLOUR SELECTOR ---------- */}
+//             {hasColors && (
+//               <div className="mb-8">
+//                 <div className="flex items-center justify-between mb-3">
+//                   <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+//                     Select Colour{selectedColor ? `: ${selectedColor}` : ""}
+//                   </h3>
+//                   {colorError && (
+//                     <span className="text-[10px] text-red-500 font-semibold uppercase tracking-widest">
+//                       Please select a colour
+//                     </span>
+//                   )}
+//                 </div>
+//                 <div className="flex flex-wrap gap-2">
+//                   {colors.map((c) => (
+//                     <button
+//                       key={c.name}
+//                       type="button"
+//                       disabled={c.out_of_stock}
+//                       onClick={() => handleSelectColor(c)}
+//                       className={`flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-semibold border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
+//                         selectedColor === c.name
+//                           ? "bg-[#111827] text-white border-[#111827]"
+//                           : colorError
+//                             ? "bg-white text-gray-600 border-red-300"
+//                             : "bg-white text-gray-600 border-[#E5E7EB] hover:border-[#D4AF37]"
+//                       }`}
+//                     >
+//                       <span
+//                         className="w-4 h-4 rounded-full border border-gray-300"
+//                         style={{ background: swatchFor(c.name) }}
+//                       />
+//                       <span className={c.out_of_stock ? "line-through" : ""}>
+//                         {c.name}
+//                       </span>
+//                     </button>
+//                   ))}
+//                 </div>
+//               </div>
+//             )}
 
 //             {hasSizes && (
 //               <div className="mb-8">
@@ -1147,7 +1260,6 @@ export default ProductPreview;
 //                     </button>
 //                   ))}
 //                 </div>
-                
 //               </div>
 //             )}
 
@@ -1183,34 +1295,52 @@ export default ProductPreview;
 //             </div>
 
 //             <div className="mb-8">
-              
+//               <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
+//                 Have questions?
+//               </h3>
+//               <a
+//                 href="https://wa.me/923166071102"
+//                 target="_blank"
+//                 rel="noopener noreferrer"
+//                 className="text-green-600 font-bold text-sm mb-3 block hover:underline"
+//               >
+//                 WhatsApp: 0316-6071102
+//               </a>
 
-//                 <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
-//   Have questions?
-// </h3>
-// <a 
-//   href="https://wa.me/923166071102" 
-//   target="_blank" 
-//   rel="noopener noreferrer"
-//   className="text-green-600 font-bold text-sm mb-3 block hover:underline"
-// >
-//    WhatsApp: 0316-6071102
-// </a>
-             
 //               <div className="flex items-center gap-4">
-//   <a href="https://wa.me/923166071102" target="_blank" rel="noopener noreferrer" className="text-green-500 hover:text-green-600 transition-colors duration-300 hover:scale-110 transform">
-//     <FaSquareWhatsapp size={28} />
-//   </a>
-//   <a href="https://www.instagram.com/nayara_zone.pk" target="_blank" rel="noopener noreferrer" className="text-pink-500 hover:text-pink-600 transition-colors duration-300 hover:scale-110 transform">
-//     <Instagram size={28} />
-//   </a>
-//   <a href="https://www.facebook.com/nayarazone" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 transition-colors duration-300 hover:scale-110 transform">
-//     <Facebook size={28} />
-//   </a>
-//   <a href="https://www.tiktok.com/@nayara.zone" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-black transition-colors duration-300 hover:scale-110 transform">
-//     <FaTiktok size={28} />
-//   </a>
-// </div>
+//                 <a
+//                   href="https://wa.me/923166071102"
+//                   target="_blank"
+//                   rel="noopener noreferrer"
+//                   className="text-green-500 hover:text-green-600 transition-colors duration-300 hover:scale-110 transform"
+//                 >
+//                   <FaSquareWhatsapp size={28} />
+//                 </a>
+//                 <a
+//                   href="https://www.instagram.com/nayara_zone.pk"
+//                   target="_blank"
+//                   rel="noopener noreferrer"
+//                   className="text-pink-500 hover:text-pink-600 transition-colors duration-300 hover:scale-110 transform"
+//                 >
+//                   <Instagram size={28} />
+//                 </a>
+//                 <a
+//                   href="https://www.facebook.com/nayarazone"
+//                   target="_blank"
+//                   rel="noopener noreferrer"
+//                   className="text-blue-500 hover:text-blue-600 transition-colors duration-300 hover:scale-110 transform"
+//                 >
+//                   <Facebook size={28} />
+//                 </a>
+//                 <a
+//                   href="https://www.tiktok.com/@nayara.zone"
+//                   target="_blank"
+//                   rel="noopener noreferrer"
+//                   className="text-gray-700 hover:text-black transition-colors duration-300 hover:scale-110 transform"
+//                 >
+//                   <FaTiktok size={28} />
+//                 </a>
+//               </div>
 //             </div>
 
 //             <div className="flex items-center gap-2 text-gray-400 text-xs mb-8 italic">
@@ -1245,13 +1375,9 @@ export default ProductPreview;
 //                       : "bg-white border-[#E5E7EB] text-gray-500 hover:border-[#111827] hover:text-[#111827]"
 //                   }`}
 //                 >
-//                   <Heart
-//                     size={22}
-//                     fill={isWishlisted ? "currentColor" : "none"}
-//                   />
+//                   <Heart size={22} fill={isWishlisted ? "currentColor" : "none"} />
 //                 </motion.button>
 //               </div>
-
 
 //               <button
 //                 onClick={handleShare}
@@ -1303,7 +1429,8 @@ export default ProductPreview;
 
 //             <div className="order-1 md:order-2 flex justify-center md:justify-end">
 //               <div className="relative p-2 bg-white border border-[#E5E7EB] shadow-md rounded-sm">
-//                 <img loading="lazy"
+//                 <img
+//                   loading="lazy"
 //                   src={descriptionImage}
 //                   alt="Detail View"
 //                   className="w-full max-w-sm rounded-sm object-cover aspect-[4/5]"
@@ -1322,36 +1449,36 @@ export default ProductPreview;
 //       />
 
 //       {/* Floating View Cart Button */}
-// <AnimatePresence>
-//   {showCartFloat && (
-//     <motion.div
-//       initial={{ y: 80, opacity: 0 }}
-//       animate={{ y: 0, opacity: 1 }}
-//       exit={{ y: 80, opacity: 0 }}
-//       transition={{ type: "spring", stiffness: 400, damping: 30 }}
-//       className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90]"
-//     >
-//       <Link
-//         to="/cart"
-//         className="flex items-center gap-3 bg-[#111827] text-white pl-5 pr-6 py-3.5 rounded-sm shadow-2xl border border-[#D4AF37]/40 hover:bg-black transition-colors group"
-//       >
-//         <div className="relative">
-//           <ShoppingBag size={20} className="text-[#D4AF37]" />
-//           <span className="absolute -top-1.5 -right-1.5 bg-[#D4AF37] text-[#111827] text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-//             ✓
-//           </span>
-//         </div>
-//         <span className="text-sm font-semibold uppercase tracking-widest">
-//           View Cart
-//         </span>
-//         <ChevronRight
-//           size={15}
-//           className="text-[#D4AF37] group-hover:translate-x-0.5 transition-transform"
-//         />
-//       </Link>
-//     </motion.div>
-//   )}
-// </AnimatePresence>
+//       <AnimatePresence>
+//         {showCartFloat && (
+//           <motion.div
+//             initial={{ y: 80, opacity: 0 }}
+//             animate={{ y: 0, opacity: 1 }}
+//             exit={{ y: 80, opacity: 0 }}
+//             transition={{ type: "spring", stiffness: 400, damping: 30 }}
+//             className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90]"
+//           >
+//             <Link
+//               to="/cart"
+//               className="flex items-center gap-3 bg-[#111827] text-white pl-5 pr-6 py-3.5 rounded-sm shadow-2xl border border-[#D4AF37]/40 hover:bg-black transition-colors group"
+//             >
+//               <div className="relative">
+//                 <ShoppingBag size={20} className="text-[#D4AF37]" />
+//                 <span className="absolute -top-1.5 -right-1.5 bg-[#D4AF37] text-[#111827] text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+//                   ✓
+//                 </span>
+//               </div>
+//               <span className="text-sm font-semibold uppercase tracking-widest">
+//                 View Cart
+//               </span>
+//               <ChevronRight
+//                 size={15}
+//                 className="text-[#D4AF37] group-hover:translate-x-0.5 transition-transform"
+//               />
+//             </Link>
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
 
 //       <AnimatePresence>
 //         {isZoomOpen && (
@@ -1387,3 +1514,4 @@ export default ProductPreview;
 // };
 
 // export default ProductPreview;
+

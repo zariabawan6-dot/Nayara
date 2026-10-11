@@ -1,6 +1,7 @@
 import React from "react";
 import HeroSection from "../components/HeroSection";
 import CategorySection from "../components/FeaturedCategories.jsx";
+import FancyCollection from "../components/FancyCollection";
 import NewArrivalsSection from "../components/newArrivals.jsx";
 import TrustBar from "../components/Testimonials.jsx";
 import CollectionBanner from "../components/Collectionbanner.jsx";
@@ -16,6 +17,7 @@ const HomePage = () => {
       <main>
         <HeroSection />
         <CategorySection />
+        <FancyCollection />
         <NewArrivalsSection />
         <TrustBar/>
         <CollectionBanner />
